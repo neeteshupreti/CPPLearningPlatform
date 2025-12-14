@@ -1,7 +1,5 @@
 # CPPLearningPlatform
 
-__Project Title__
-
 An Interactive Storytelling-Based Platform for Learning C++ Programming
 
 __Project Overview__
