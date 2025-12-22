@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Signup - C++ StoryLearn</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+*{margin:0; padding:0; box-sizing:border-box; font-family:Poppins, sans-serif;}
+body { background: #7086b7; height:100vh; display:flex; justify-content:center; align-items:center;}
+.container { width:900px; height:500px; position:relative;}
+.bg-box { width:90%; height:300px; background:#25285e; border-radius:6px; position:absolute; top:130px; left:0;}
+.right-content { position:absolute; left:400px; top:250px; color:white; text-align:center; z-index:5;}
+.right-content p { margin-bottom:20px; font-size:18px;}
+.right-content button { background:#d9d9d9; border:none; padding:10px 25px; border-radius:20px; cursor:pointer; font-size:16px;}
+.signup-box { width:280px; padding:40px 35px; background:white; border:3px solid #2b82f7; border-radius:8px; position:absolute; top:65px; left:80px; z-index:10; box-shadow:0 0 18px rgba(0,0,0,0.2);}
+.signup-box h2 { text-align:center; margin-bottom:20px;}
+.input-box { position:relative; margin-bottom:20px;}
+.input-box input { width:100%; padding:10px; padding-right:35px; border:1.4px solid black; border-radius:5px;}
+.input-box i { position:absolute; right:10px; top:50%; transform:translateY(-50%);}
+.signup-btn { width:100%; padding:12px; margin-top:10px; background:#8da6d4; border:none; border-radius:25px; cursor:pointer; font-weight:bold;}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="bg-box"></div>
+
+    <div class="signup-box">
+        <h2>Sign Up</h2>
+
+        <form method="POST" action="{% url 'accounts:signup' %}">
+            {% csrf_token %}
+            <div class="input-box">
+                <input type="text" name="first_name" placeholder="First Name" required>
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="input-box">
+                <input type="text" name="last_name" placeholder="Last Name" required>
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="input-box">
+                <input type="email" name="email" placeholder="Email" required>
+                <i class="fa-solid fa-envelope"></i>
+            </div>
+            <div class="input-box">
+                <input type="password" name="password" placeholder="Password" required>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <div class="input-box">
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <button type="submit" class="signup-btn">Sign up</button>
+        </form>
+    </div>
+
+    <div class="right-content">
+        <p>Already have an account?</p>
+        <a href="{% url 'accounts:login' %}"><button>Log in</button></a>
+    </div>
+</div>
+</body>
+</html>

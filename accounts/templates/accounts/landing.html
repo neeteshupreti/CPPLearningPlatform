@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>C++ StoryLearn - Landing</title>
+<style>
+body, html { margin:0; padding:0; font-family: 'Segoe UI', sans-serif; background:#f0f4f8; }
+a{text-decoration:none;}
+.navbar { background:#0056D2; padding:1rem 2rem; display:flex; justify-content:space-between; align-items:center; box-shadow:0 4px 6px rgba(0,0,0,0.1);}
+.navbar a{ color:white; margin-left:1rem; font-weight:500; transition:0.3s;}
+.navbar a:hover{ color:#FFC107;}
+.container { max-width:900px; margin:3rem auto; background:white; padding:3rem; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,0.05);}
+.btn-primary{ background:#0056D2; border:none; color:white; font-weight:600; border-radius:8px; cursor:pointer; padding:12px 25px; transition:0.3s; }
+.btn-primary:hover{ background:#003d99;}
+.card { background:#f9faff; padding:1.5rem; border-radius:10px; margin:1rem 0; box-shadow:0 6px 12px rgba(0,0,0,0.05);}
+@media(max-width:768px){ .container{ margin:1rem; padding:2rem;} .navbar{ flex-direction:column; gap:0.5rem;} }
+</style>
+</head>
+<body>
+<div class="navbar">
+    <a href="{% url 'accounts:home' %}">C++ StoryLearn</a>
+    <div>
+        <a href="{% url 'accounts:login' %}">Login</a>
+        <a href="{% url 'accounts:signup' %}">Signup</a>
+    </div>
+</div>
+
+<div class="container">
+    <h1>Welcome to C++ Story Learning Platform</h1>
+    <p>Learn C++ programming through interactive storytelling, missions, and challenges.</p>
+    <a href="{% url 'accounts:signup' %}" class="btn-primary">Get Started</a>
+
+    <div class="card">
+        <h2>Features</h2>
+        <ul>
+            <li>Story-based learning modules</li>
+            <li>Interactive coding challenges</li>
+            <li>Chatbot guidance for hints</li>
+            <li>Instant feedback & gamification</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
