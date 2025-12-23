@@ -41,6 +41,6 @@ The project follows core Instructional Design principles, including:
     • Motivation through storytelling, rewards, and chatbot-based guidance
 
 ## Important Commands
-__python manage.py runserver__ : Helps run the project as website in desired browser with localhost.
+__python manage.py runserver__ : Helps run the project as website in desired browser with localhost
 __python manage.py makemigrations__ : Generates migration files based on the changes made to models in models.py
 __python manage.py migrate__ : Applies the changes described in these migration files to the actual database
