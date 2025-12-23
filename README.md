@@ -1,7 +1,6 @@
 # CPPLearningPlatform
 
 ![Python](https://img.shields.io/badge/Python-3.12-blue?style=for-the-badge&logo=python)
-![Django](https://img.shields.io/badge/Django-6.0-green?style=for-the-badge&logo=django)
 ![JavaScript](https://img.shields.io/badge/JavaScript-ES6-yellow?style=for-the-badge&logo=javascript)
 
 __An Interactive Storytelling-Based Platform for Learning C++ Programming__
@@ -39,8 +38,3 @@ The project follows core Instructional Design principles, including:
     • Learning by doing through interactive coding tasks and problem-solving
     • Immediate feedback and reinforcement to support mastery
     • Motivation through storytelling, rewards, and chatbot-based guidance
-
-## Important Commands
-__python manage.py runserver__ : Helps run the project as website in desired browser with localhost <br>
-__python manage.py makemigrations__ : Generates migration files based on the changes made to models in models.py <br>
-__python manage.py migrate__ : Applies the changes described in these migration files to the actual database <br>
