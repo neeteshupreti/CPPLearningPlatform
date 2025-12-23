@@ -33,7 +33,7 @@ Follow these steps to get the project running locally:
 
 ### 1. Clone the repository
 ```bash
-git clone [https://github.com/your-username/RoboQuiz_py.git](https://github.com/your-username/RoboQuiz_py.git)
+git clone https://github.com/neeteshupreti/RoboQuiz_py.git
 cd RoboQuiz_py
 ```
 
