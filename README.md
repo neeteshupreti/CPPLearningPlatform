@@ -38,6 +38,6 @@ cd RoboQuiz_py
 ```
 
 ### 2. Important Commands
-__python manage.py runserver__ : Helps run the project as website in desired browser with localhost <br>
-__python manage.py makemigrations__ : Generates migration files based on the changes made to models in models.py <br>
-__python manage.py migrate__ : Applies the changes described in these migration files to the actual database <br>
+__python manage.py runserver__: Helps run the project as website in desired browser with localhost <br>
+__python manage.py makemigrations__: Generates migration files based on the changes made to models in models.py <br>
+__python manage.py migrate__: Applies the changes described in these migration files to the actual database <br>
