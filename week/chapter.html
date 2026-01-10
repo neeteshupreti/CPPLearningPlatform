@@ -28,8 +28,8 @@
             margin: auto;
             padding: 14px 40px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
         }
 
         .logo {
@@ -52,28 +52,24 @@
 
         .nav-links .active {
             font-weight: 700;
+            text-decoration: underline;
         }
 
-        .profile {
+        .profile img {
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: #e5e7eb;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 11px;
-            color: #6b7280;
+            object-fit: cover;
         }
 
         /* ================= TITLE ================= */
         .page-title {
-            margin: 30px auto 20px;
             max-width: 1200px;
+            margin: 30px auto 20px;
             padding: 0 40px;
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
         }
 
         .page-title::before,
@@ -87,7 +83,6 @@
         .page-title h2 {
             font-size: 18px;
             color: #233b8f;
-            font-weight: 600;
         }
 
         /* ================= CHAPTER GRID ================= */
@@ -106,6 +101,8 @@
             overflow: hidden;
             background: #fff;
             transition: transform 0.2s ease;
+            cursor: pointer;
+            position: relative;
         }
 
         .chapter-card:hover {
@@ -118,15 +115,41 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 13px;
-            color: #6b7280;
+        }
+
+        .chapter-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .chapter-title {
-            padding: 10px 12px;
+            padding: 12px;
             font-size: 14px;
             font-weight: 600;
-            color: #1f2937;
+        }
+
+        /* ================= LOCKED CHAPTER ================= */
+        .chapter-card.locked {
+            cursor: not-allowed;
+            filter: grayscale(100%);
+        }
+
+        .chapter-card.locked:hover {
+            transform: none;
+        }
+
+        .chapter-card.locked::after {
+            content: "🔒 Locked";
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: 700;
+            color: #374151;
         }
 
         /* ================= RESPONSIVE ================= */
@@ -150,7 +173,6 @@
 </head>
 <body>
 
-<!-- ================= NAVBAR ================= -->
 <header>
     <div class="navbar">
         <div class="logo">📘 StoryLearnC++</div>
@@ -158,47 +180,60 @@
             <span>Home</span>
             <span class="active">Chapters</span>
             <span>Chatbot</span>
-            <div class="profile">IMG</div>
+            <div class="profile">
+                <img src="./images/pp2.avif" alt="Profile">
+            </div>
         </div>
     </div>
 </header>
 
-<!-- ================= TITLE ================= -->
 <div class="page-title">
     <h2>Choose your Chapters</h2>
 </div>
 
-<!-- ================= CHAPTER CARDS ================= -->
 <section class="chapters">
 
     <div class="chapter-card">
-        <div class="chapter-image">Image</div>
-        <div class="chapter-title">1. Kingdom of variable</div>
+        <div class="chapter-image">
+            <img src="./images/variable.jpg" alt="">
+        </div>
+        <div class="chapter-title">1. Kingdom of Variables</div>
     </div>
 
     <div class="chapter-card">
-        <div class="chapter-image">Image</div>
-        <div class="chapter-title">2. Conditional canyon</div>
+        <div class="chapter-image">
+            <img src="./images/chain-lakes-loop.jpg" alt="">
+        </div>
+        <div class="chapter-title">2. Conditional Canyon</div>
     </div>
 
     <div class="chapter-card">
-        <div class="chapter-image">Image</div>
+        <div class="chapter-image">
+            <img src="./images/chain-lakes-loop.jpg" alt="">
+        </div>
         <div class="chapter-title">3. Loop Lake</div>
     </div>
 
     <div class="chapter-card">
-        <div class="chapter-image">Image</div>
-        <div class="chapter-title">4. Service house & function</div>
+        <div class="chapter-image">
+            <img src="./images/download (5).jpg" alt="">
+        </div>
+        <div class="chapter-title">4. Service House & Functions</div>
     </div>
 
     <div class="chapter-card">
-        <div class="chapter-image">Image</div>
-        <div class="chapter-title">5. Pointer and Quest class</div>
+        <div class="chapter-image">
+            <img src="./images/pointer.jpg" alt="">
+        </div>
+        <div class="chapter-title">5. Pointer & Quest Class</div>
     </div>
 
-    <div class="chapter-card">
-        <div class="chapter-image">🔒 Locked</div>
-        <div class="chapter-title">6. Inheritance royal family</div>
+    <!-- LOCKED CHAPTER -->
+    <div class="chapter-card locked">
+        <div class="chapter-image">
+            <img src="./images/happy-royal-family-in-front-of-castle-free-vector (1).jpg" alt="">
+        </div>
+        <div class="chapter-title">6. Inheritance Royal Family</div>
     </div>
 
 </section>

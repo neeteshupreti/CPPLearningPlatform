@@ -32,8 +32,8 @@
             margin: auto;
             padding: 16px 40px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
+            align-items: center;
         }
 
         .logo {
@@ -79,7 +79,7 @@
         /* ================= INPUTS ================= */
         .input-group {
             position: relative;
-            margin-bottom: 18px;
+            margin-bottom: 8px;
         }
 
         .input-group input {
@@ -92,6 +92,10 @@
             outline: none;
         }
 
+        .input-group input.error {
+            border-color: #dc2626;
+        }
+
         .input-group i {
             position: absolute;
             right: 12px;
@@ -99,6 +103,13 @@
             transform: translateY(-50%);
             color: #000;
             font-size: 14px;
+        }
+
+        .error-text {
+            font-size: 12px;
+            color: #dc2626;
+            margin-bottom: 10px;
+            text-align: left;
         }
 
         /* ================= BUTTON ================= */
@@ -112,7 +123,7 @@
             font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            margin: 12px 0;
+            margin: 14px 0;
         }
 
         /* ================= LINKS ================= */
@@ -170,17 +181,23 @@
         <h2>Welcome Back!</h2>
         <p>Login to StoryLearn C++</p>
 
-        <div class="input-group">
-            <input type="email" placeholder="Email">
-            <i class="fa fa-envelope"></i>
-        </div>
+        <form id="loginForm" novalidate>
 
-        <div class="input-group">
-            <input type="password" placeholder="Password">
-            <i class="fa fa-lock"></i>
-        </div>
+            <div class="input-group">
+                <input type="email" id="email" placeholder="Email">
+                <i class="fa fa-envelope"></i>
+            </div>
+            <div class="error-text" id="emailError"></div>
 
-        <button>Login</button>
+            <div class="input-group">
+                <input type="password" id="password" placeholder="Password">
+                <i class="fa fa-lock"></i>
+            </div>
+            <div class="error-text" id="passwordError"></div>
+
+            <button type="submit">Login</button>
+
+        </form>
 
         <a href="#" class="forgot">Forgot password?</a>
 
@@ -191,6 +208,56 @@
         </div>
     </div>
 </div>
+
+<!-- ================= VALIDATION SCRIPT ================= -->
+<script>
+    const form = document.getElementById("loginForm");
+    const email = document.getElementById("email");
+    const password = document.getElementById("password");
+
+    const emailError = document.getElementById("emailError");
+    const passwordError = document.getElementById("passwordError");
+
+    form.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        let isValid = true;
+
+        // Reset
+        emailError.textContent = "";
+        passwordError.textContent = "";
+        email.classList.remove("error");
+        password.classList.remove("error");
+
+        // Email validation
+        if (email.value.trim() === "") {
+            emailError.textContent = "Email is required";
+            email.classList.add("error");
+            isValid = false;
+        } else if (!/^\S+@\S+\.\S+$/.test(email.value)) {
+            emailError.textContent = "Enter a valid email address";
+            email.classList.add("error");
+            isValid = false;
+        }
+
+        // Password validation
+        if (password.value.trim() === "") {
+            passwordError.textContent = "Password is required";
+            password.classList.add("error");
+            isValid = false;
+        } else if (password.value.length < 6) {
+            passwordError.textContent = "Password must be at least 6 characters";
+            password.classList.add("error");
+            isValid = false;
+        }
+
+        // If valid
+        if (isValid) {
+            alert("Login successful ✔");
+            form.reset();
+        }
+    });
+</script>
 
 </body>
 </html>
