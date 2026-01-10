@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Robo-Coder Adventure</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-page: #F1F5F9; --bg-surface: #FFFFFF; --bg-dark: #020617;
+            --primary: #2563EB; --secondary: #16A34A; --accent: #0EA5E9;
+            --danger: #DC2626; --text-main: #0F172A; --text-muted: #64748B;
+        }
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #E8EEF9, #F8FAFC);
+            min-height: 100vh; display: flex; justify-content: center; align-items: center;
+        }
+        .app {
+            width: 95%; max-width: 1200px; background: var(--bg-surface);
+            border-radius: 22px; box-shadow: 0 30px 60px rgba(0,0,0,0.12); overflow: hidden;
+        }
+        .header { padding: 20px 30px; background: linear-gradient(90deg, var(--primary), var(--accent)); color: white; }
+        .hud { display: flex; justify-content: space-between; margin-top: 10px; font-size: 14px; }
+        .progress-bar { background: rgba(255,255,255,0.3); border-radius: 20px; width: 200px; height: 10px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #22C55E; width: 0%; transition: 0.5s; }
+        .main { display: grid; grid-template-columns: 280px 1fr; gap: 20px; padding: 25px; }
+        .left-panel { background: #F8FAFC; border-radius: 18px; padding: 20px; box-shadow: inset 0 0 0 1px #E2E8F0; }
+        .robot { text-align: center; margin-bottom: 20px; }
+        .robot img { width: 120px; }
+        .status { background: #ECFEFF; padding: 12px; border-left: 4px solid var(--accent); border-radius: 10px; font-size: 14px; }
+        .game-area { background: #F8FAFC; border-radius: 18px; padding: 25px; box-shadow: inset 0 0 0 1px #E2E8F0; }
+        .story { background: #EFF6FF; padding: 16px; border-left: 5px solid var(--primary); border-radius: 10px; margin-bottom: 20px; }
+        .code { background: var(--bg-dark); color: #E5E7EB; padding: 20px; border-radius: 14px; font-family: monospace; white-space: pre-wrap; margin-bottom: 20px; }
+        .options { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 15px; }
+        .option { background: white; border: 2px solid var(--primary); border-radius: 14px; padding: 14px; cursor: pointer; transition: 0.3s; }
+        .option:hover { background: var(--primary); color: white; transform: translateY(-3px); }
+        .feedback { margin-top: 15px; font-size: 18px; font-weight: 600; }
+        .next { margin-top: 20px; padding: 12px 26px; background: var(--secondary); color: white; border: none; border-radius: 12px; cursor: pointer; display: none; }
+    </style>
+</head>
+<body>
+<div class="app">
+    <div class="header">
+        <h1>🤖 Robo-Coder Adventure</h1>
+        <div class="hud">
+            <div id="levelText">Mission 1 of 3</div>
+            <div>
+                <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                <div id="scoreText">Score: 0</div>
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        <div class="left-panel">
+            <div class="robot">
+                <img src="https://cdn-icons-png.flaticon.com/512/4712/4712109.png">
+                <h3>Robo-X</h3>
+            </div>
+            <div class="status" id="hintBox">System online. Awaiting mission…</div>
+        </div>
+        <div class="game-area">
+            <div class="story" id="story"></div>
+            <div class="code" id="code"></div>
+            <div class="options" id="options"></div>
+            <div class="feedback" id="feedback"></div>
+            <button class="next" id="nextBtn">Next Mission ➜</button>
+        </div>
+    </div>
+</div>
+<script>
+ const levels = {{ levels_json|safe }};
+
+    let level=0, score=0;
+    const story=document.getElementById("story"), code=document.getElementById("code"), options=document.getElementById("options"), feedback=document.getElementById("feedback"), nextBtn=document.getElementById("nextBtn"), hintBox=document.getElementById("hintBox"), progressFill=document.getElementById("progressFill"), levelText=document.getElementById("levelText"), scoreText=document.getElementById("scoreText");
+
+    function loadLevel(){
+        let l=levels[level];
+        story.textContent=l.story; code.textContent=l.code;
+        feedback.textContent=""; hintBox.textContent="Hint system ready.";
+        options.innerHTML=""; nextBtn.style.display="none";
+        levelText.textContent=`Mission ${level+1} of ${levels.length}`;
+        progressFill.style.width=`${(level/levels.length)*100}%`;
+        l.options.forEach((o,i)=>{
+            let btn=document.createElement("div"); btn.className="option"; btn.textContent=o;
+            btn.onclick=()=>check(i); options.appendChild(btn);
+        });
+    }
+
+    function check(i){
+        if(i===levels[level].correct){
+            feedback.style.color="green"; feedback.textContent="✅ Mission Success!";
+            score++; scoreText.textContent=`Score: ${score}`;
+            nextBtn.style.display="inline-block";
+            progressFill.style.width=`${((level+1)/levels.length)*100}%`;
+        } else {
+            feedback.style.color="red"; feedback.textContent="❌ Incorrect";
+            hintBox.textContent="Hint: "+levels[level].hint;
+        }
+    }
+
+    nextBtn.onclick=()=>{
+        level++;
+        if(level<levels.length) loadLevel();
+        else {
+            story.textContent="🎉 Robo-X fully repaired!"; code.textContent=""; options.innerHTML="";
+            feedback.textContent=`Final Score: ${score}/${levels.length}`;
+        }
+    };
+    loadLevel();
+</script>
+</body>
+</html>
