@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>C++ Chatbot</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        body {
+            background: #ffffff;
+            color: #1f2937;
+        }
+
+        /* ================= NAVBAR ================= */
+        header {
+            background: #233b8f;
+            border-bottom: 3px solid #1e90ff;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: auto;
+            padding: 14px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            color: #fff;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            color: #fff;
+            font-size: 15px;
+        }
+
+        .nav-links span {
+            cursor: pointer;
+        }
+
+        .nav-links .active {
+            font-weight: 700;
+        }
+
+        .profile img {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* ================= PAGE TITLE ================= */
+        .title {
+            text-align: center;
+            margin: 30px 0 20px;
+            font-size: 20px;
+            color: #233b8f;
+            font-weight: 600;
+        }
+
+        /* ================= CHAT CONTAINER ================= */
+        .chat-wrapper {
+            max-width: 900px;
+            margin: auto;
+            border: 1.5px solid #9ca3af;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .chat-area {
+            min-height: 300px;
+        }
+
+        /* ================= CHAT BUBBLES ================= */
+        .bot-message {
+            background: #e5e5e5;
+            padding: 14px 18px;
+            border-radius: 12px;
+            width: fit-content;
+            max-width: 60%;
+            margin-bottom: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .user-message {
+            background: #233b8f;
+            color: #fff;
+            padding: 12px 18px;
+            border-radius: 18px;
+            width: fit-content;
+            margin-left: auto;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        .bot-message b {
+            font-weight: 600;
+        }
+
+        /* ================= INPUT BAR ================= */
+        .chat-input {
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 20px;
+            border: 1.5px solid #9ca3af;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .send-btn {
+            width: 38px;
+            height: 38px;
+            background: #233b8f;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 768px) {
+            .chat-wrapper {
+                margin: 0 16px;
+            }
+
+            .bot-message,
+            .user-message {
+                max-width: 80%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header>
+    <div class="navbar">
+        <div class="logo">📘 StoryLearnC++</div>
+        <div class="nav-links">
+            <span>Home</span>
+            <span>Chapters</span>
+            <span class="active">Chatbot</span>
+            <div class="profile"><img src="./images/pp2.avif" alt="Profile"></div>
+        </div>
+    </div>
+</header>
+
+<!-- ================= TITLE ================= -->
+<div class="title">C++ chatbot</div>
+
+<!-- ================= CHAT BOX ================= -->
+<div class="chat-wrapper">
+    <div class="chat-area">
+
+        <div class="bot-message">
+            Welcome! Ask me about variables, function etc
+        </div>
+
+        <div class="user-message">
+            what is function?
+        </div>
+
+        <div class="bot-message">
+            Function is c++ is block of code that perform specific
+            task and run when called <b>Readmore</b>
+        </div>
+
+    </div>
+
+    <!-- ================= INPUT ================= -->
+    <div class="chat-input">
+        <input type="text" placeholder="Ask your c++ doubts">
+        <div class="send-btn">➤</div>
+    </div>
+</div>
+
+</body>
+</html>

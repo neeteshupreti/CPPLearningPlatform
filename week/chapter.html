@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapters | StoryLearnC++</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        body {
+            background: #ffffff;
+            color: #1f2937;
+        }
+
+        /* ================= NAVBAR ================= */
+        header {
+            background: #233b8f;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: auto;
+            padding: 14px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 28px;
+            color: #fff;
+            font-size: 15px;
+        }
+
+        .nav-links span {
+            cursor: pointer;
+        }
+
+        .nav-links .active {
+            font-weight: 700;
+        }
+
+        .profile {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            color: #6b7280;
+        }
+
+        /* ================= TITLE ================= */
+        .page-title {
+            margin: 30px auto 20px;
+            max-width: 1200px;
+            padding: 0 40px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .page-title::before,
+        .page-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #9ca3af;
+        }
+
+        .page-title h2 {
+            font-size: 18px;
+            color: #233b8f;
+            font-weight: 600;
+        }
+
+        /* ================= CHAPTER GRID ================= */
+        .chapters {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px 40px 60px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .chapter-card {
+            border: 1.5px solid #d1d5db;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #fff;
+            transition: transform 0.2s ease;
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .chapter-image {
+            height: 140px;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .chapter-title {
+            padding: 10px 12px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 900px) {
+            .chapters {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .chapters {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+
+            .page-title {
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header>
+    <div class="navbar">
+        <div class="logo">📘 StoryLearnC++</div>
+        <div class="nav-links">
+            <span>Home</span>
+            <span class="active">Chapters</span>
+            <span>Chatbot</span>
+            <div class="profile">IMG</div>
+        </div>
+    </div>
+</header>
+
+<!-- ================= TITLE ================= -->
+<div class="page-title">
+    <h2>Choose your Chapters</h2>
+</div>
+
+<!-- ================= CHAPTER CARDS ================= -->
+<section class="chapters">
+
+    <div class="chapter-card">
+        <div class="chapter-image">Image</div>
+        <div class="chapter-title">1. Kingdom of variable</div>
+    </div>
+
+    <div class="chapter-card">
+        <div class="chapter-image">Image</div>
+        <div class="chapter-title">2. Conditional canyon</div>
+    </div>
+
+    <div class="chapter-card">
+        <div class="chapter-image">Image</div>
+        <div class="chapter-title">3. Loop Lake</div>
+    </div>
+
+    <div class="chapter-card">
+        <div class="chapter-image">Image</div>
+        <div class="chapter-title">4. Service house & function</div>
+    </div>
+
+    <div class="chapter-card">
+        <div class="chapter-image">Image</div>
+        <div class="chapter-title">5. Pointer and Quest class</div>
+    </div>
+
+    <div class="chapter-card">
+        <div class="chapter-image">🔒 Locked</div>
+        <div class="chapter-title">6. Inheritance royal family</div>
+    </div>
+
+</section>
+
+</body>
+</html>

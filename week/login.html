@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | StoryLearnC++</title>
+
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        body {
+            background: #ffffff;
+            color: #1f2937;
+            min-height: 100vh;
+        }
+
+        /* ================= NAVBAR ================= */
+        header {
+            background: #233b8f;
+        }
+
+        .navbar {
+            max-width: 1200px;
+            margin: auto;
+            padding: 16px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .nav-links a {
+            color: #fff;
+            text-decoration: none;
+            margin-left: 30px;
+            font-size: 15px;
+        }
+
+        /* ================= LOGIN CONTAINER ================= */
+        .login-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 20px;
+        }
+
+        .login-card {
+            width: 360px;
+            border: 2px solid #9ca3af;
+            border-radius: 16px;
+            padding: 30px 28px;
+            text-align: center;
+        }
+
+        .login-card h2 {
+            color: #233b8f;
+            font-size: 20px;
+            margin-bottom: 6px;
+        }
+
+        .login-card p {
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        /* ================= INPUTS ================= */
+        .input-group {
+            position: relative;
+            margin-bottom: 18px;
+        }
+
+        .input-group input {
+            width: 100%;
+            height: 42px;
+            padding: 0 40px 0 12px;
+            border-radius: 6px;
+            border: 1.5px solid #9ca3af;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .input-group i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #000;
+            font-size: 14px;
+        }
+
+        /* ================= BUTTON ================= */
+        button {
+            width: 100%;
+            height: 42px;
+            background: #233b8f;
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            margin: 12px 0;
+        }
+
+        /* ================= LINKS ================= */
+        .forgot {
+            font-size: 14px;
+            color: #233b8f;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 18px;
+        }
+
+        .divider {
+            height: 1px;
+            background: #9ca3af;
+            margin-bottom: 18px;
+        }
+
+        .signup {
+            font-size: 14px;
+        }
+
+        .signup a {
+            color: #233b8f;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* ================= RESPONSIVE ================= */
+        @media (max-width: 480px) {
+            .login-card {
+                width: 100%;
+                max-width: 360px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ================= NAVBAR ================= -->
+<header>
+    <div class="navbar">
+        <div class="logo">📘 StoryLearnC++</div>
+        <div class="nav-links">
+            <a href="#">Home</a>
+            <a href="#">Chapters</a>
+            <a href="#">Chatbot</a>
+            <a href="#">Login</a>
+        </div>
+    </div>
+</header>
+
+<!-- ================= LOGIN FORM ================= -->
+<div class="login-wrapper">
+    <div class="login-card">
+        <h2>Welcome Back!</h2>
+        <p>Login to StoryLearn C++</p>
+
+        <div class="input-group">
+            <input type="email" placeholder="Email">
+            <i class="fa fa-envelope"></i>
+        </div>
+
+        <div class="input-group">
+            <input type="password" placeholder="Password">
+            <i class="fa fa-lock"></i>
+        </div>
+
+        <button>Login</button>
+
+        <a href="#" class="forgot">Forgot password?</a>
+
+        <div class="divider"></div>
+
+        <div class="signup">
+            Don’t have an account ? <a href="#">Sign Up</a>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
