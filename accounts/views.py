@@ -59,4 +59,4 @@ def dashboard_view(request):
 # Logout
 def logout_view(request):
     logout(request)
-    return redirect('accounts:landing')
+    return redirect('accounts:home')

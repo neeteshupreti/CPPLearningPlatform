@@ -1,0 +1,302 @@
+{% extends "base.html" %}
+
+{% block title %}Leaderboard - C++ StoryLearn{% endblock %}
+
+{% block extra_css %}
+    <style>
+        .leaderboard-header {
+            background: linear-gradient(135deg, #0056D2 0%, #003d99 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .leaderboard-header h1 {
+            margin: 0 0 0.5rem 0;
+        }
+
+        .leaderboard-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .leaderboard-table {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #f9faff;
+            border-bottom: 2px solid #0056D2;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #0056D2;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr {
+            transition: background 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: #f9faff;
+        }
+
+        .rank-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            font-weight: bold;
+            color: white;
+            margin-right: 0.5rem;
+        }
+
+        .rank-1 {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+        }
+
+        .rank-2 {
+            background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%);
+        }
+
+        .rank-3 {
+            background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%);
+        }
+
+        .rank-default {
+            background: #0056D2;
+        }
+
+        .rank-cell {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .player-name {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .player-name i {
+            font-size: 1.2rem;
+        }
+
+        .score-cell {
+            font-weight: 600;
+            color: #0056D2;
+        }
+
+        .missions-cell {
+            text-align: center;
+            background: #f9faff;
+        }
+
+        .current-user {
+            background: #e7f3ff;
+        }
+
+        .current-user td {
+            font-weight: 600;
+            color: #0056D2;
+        }
+
+        .medal {
+            font-size: 1.3rem;
+            margin-right: 0.5rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+            text-align: center;
+            border-top: 4px solid #0056D2;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0056D2;
+            margin: 0.5rem 0;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .leaderboard-header {
+                padding: 1.5rem;
+            }
+
+            th, td {
+                padding: 0.75rem;
+                font-size: 0.9rem;
+            }
+
+            .rank-badge {
+                width: 35px;
+                height: 35px;
+                font-size: 0.9rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="leaderboard-container">
+        <div class="leaderboard-header">
+            <h1><i class="fas fa-ranking-star"></i> Global Leaderboard</h1>
+            <p>Top performers in C++ StoryLearn challenges</p>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-users" style="font-size: 2rem; color: #0056D2;"></i>
+                <div class="stat-number">1,234</div>
+                <div class="stat-label">Active Learners</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-trophy" style="font-size: 2rem; color: #FFC107;"></i>
+                <div class="stat-number">15,430</div>
+                <div class="stat-label">Total Points Earned</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-fire" style="font-size: 2rem; color: #dc3545;"></i>
+                <div class="stat-number">847</div>
+                <div class="stat-label">Missions Completed</div>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-star" style="font-size: 2rem; color: #FFC107;"></i>
+                <div class="stat-number">94%</div>
+                <div class="stat-label">Average Score</div>
+            </div>
+        </div>
+
+        <!-- Leaderboard Table -->
+        <div class="leaderboard-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-medal"></i> Rank</th>
+                        <th>Player Name</th>
+                        <th><i class="fas fa-star"></i> Score</th>
+                        <th><i class="fas fa-tasks"></i> Missions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                        <tr {% if user.rank == 6 %}class="current-user"{% endif %}>
+                            <td>
+                                <div class="rank-cell">
+                                    {% if user.rank == 1 %}
+                                        <span class="medal">🥇</span>
+                                        <span class="rank-badge rank-1">{{ user.rank }}</span>
+                                    {% elif user.rank == 2 %}
+                                        <span class="medal">🥈</span>
+                                        <span class="rank-badge rank-2">{{ user.rank }}</span>
+                                    {% elif user.rank == 3 %}
+                                        <span class="medal">🥉</span>
+                                        <span class="rank-badge rank-3">{{ user.rank }}</span>
+                                    {% else %}
+                                        <span class="rank-badge rank-default">#{{ user.rank }}</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="player-name">
+                                    {% if user.rank <= 3 %}
+                                        <i class="fas fa-crown" style="color: #FFC107;"></i>
+                                    {% else %}
+                                        <i class="fas fa-user-circle"></i>
+                                    {% endif %}
+                                    {{ user.name }}
+                                    {% if user.rank == 6 %}
+                                        <span style="background: #0056D2; color: white; padding: 0.2rem 0.5rem; border-radius: 4px; font-size: 0.8rem; margin-left: 0.5rem;">YOU</span>
+                                    {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                <span class="score-cell">{{ user.score }} XP</span>
+                            </td>
+                            <td class="missions-cell">
+                                {{ user.missions }}/8
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Achievement Info -->
+        <div class="card">
+            <h2><i class="fas fa-star"></i> Earn More Points</h2>
+            <p>Complete missions, solve challenges, and climb the leaderboard!</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem;">
+                <div>
+                    <strong>💯 Perfect Score</strong>
+                    <p>+150 XP</p>
+                </div>
+                <div>
+                    <strong>⚡ Streak Bonus</strong>
+                    <p>+50 XP per mission</p>
+                </div>
+                <div>
+                    <strong>🎯 Speed Bonus</strong>
+                    <p>+25 XP for quick completion</p>
+                </div>
+                <div>
+                    <strong>🏆 Rank Up</strong>
+                    <p>Special badges</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="{% url 'game:home' %}" class="btn btn-primary">
+                <i class="fas fa-play"></i> Start Next Mission
+            </a>
+            <a href="{% url 'accounts:dashboard' %}" class="btn btn-secondary">
+                <i class="fas fa-chart-line"></i> My Dashboard
+            </a>
+        </div>
+    </div>
+{% endblock %}

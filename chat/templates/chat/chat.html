@@ -1,217 +1,325 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Groq C++ Tutor</title>
-<style>
-  /* Base styles */
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f0f2f5;
-    margin: 0;
-    padding: 0;
-  }
+{% extends "base.html" %}
 
-  h2 {
-    text-align: center;
-    color: #1a73e8;
-    margin: 20px 0;
-  }
+{% block title %}AI Tutor - C++ StoryLearn{% endblock %}
 
-  /* Chat box container */
-  #chat-container {
-    max-width: 800px;
-    margin: auto;
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    display: flex;
-    flex-direction: column;
-    height: 70vh;
-  }
+{% block extra_css %}
+    <style>
+        .chat-page {
+            max-width: 900px;
+            margin: 2rem auto;
+        }
 
-  #chat-box {
-    flex: 1;
-    overflow-y: auto;
-    padding-right: 10px;
-    display: flex;
-    flex-direction: column;
-  }
+        .chat-header {
+            background: linear-gradient(135deg, #0056D2 0%, #003d99 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
 
-  /* Chat message bubbles */
-  .message {
-    margin: 6px 0;
-    padding: 12px 16px;
-    border-radius: 12px;
-    max-width: 70%;
-    word-wrap: break-word;
-    line-height: 1.4;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-  }
+        .chat-header h1 {
+            margin: 0 0 0.5rem 0;
+        }
 
-  /* User messages: right */
-  .message.user {
-    background: #d2e3fc;
-    color: #1a73e8;
-    align-self: flex-end;
-    border-bottom-right-radius: 0;
-    text-align: right;
-  }
+        #chat-container {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            height: 65vh;
+        }
 
-  /* Bot messages: left */
-  .message.bot {
-    background: #f1f3f4;
-    color: #202124;
-    align-self: flex-start;
-    border-bottom-left-radius: 0;
-    text-align: left;
-  }
+        #chat-box {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 10px;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+        }
 
-  /* Read more / show less */
-  .short-text, .full-text { display: inline; }
-  .read-more, .read-less {
-    color: #1a73e8;
-    text-decoration: none;
-    cursor: pointer;
-    font-weight: bold;
-    margin-left: 5px;
-  }
+        .message {
+            margin: 8px 0;
+            padding: 12px 16px;
+            border-radius: 12px;
+            max-width: 80%;
+            word-wrap: break-word;
+            line-height: 1.5;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+            animation: fadeIn 0.3s ease;
+        }
 
-  /* Input area */
-  #input-container {
-    display: flex;
-    margin-top: 10px;
-  }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-  #user-input {
-    flex: 1;
-    padding: 12px 16px;
-    border-radius: 20px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-  }
+        .message.user {
+            background: #d2e3fc;
+            color: #1a73e8;
+            align-self: flex-end;
+            border-bottom-right-radius: 0;
+            margin-left: auto;
+        }
 
-  #send-btn {
-    background: #1a73e8;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    margin-left: 10px;
-    cursor: pointer;
-    font-size: 20px;
-    transition: 0.2s;
-  }
+        .message.bot {
+            background: #f1f3f4;
+            color: #202124;
+            align-self: flex-start;
+            border-bottom-left-radius: 0;
+            margin-right: auto;
+        }
 
-  #send-btn:hover {
-    background: #1669c1;
-  }
+        .message b {
+            display: block;
+            margin-bottom: 0.3rem;
+            font-weight: 600;
+        }
 
-  /* Scrollbar styling */
-  #chat-box::-webkit-scrollbar {
-    width: 8px;
-  }
+        .read-more, .read-less {
+            color: #0056D2;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            margin-left: 5px;
+        }
 
-  #chat-box::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,0.2);
-    border-radius: 4px;
-  }
+        .read-more:hover, .read-less:hover {
+            text-decoration: underline;
+        }
 
-  @media (max-width: 600px) {
-    #chat-container { height: 60vh; }
-    .message { max-width: 90%; }
-  }
-</style>
-</head>
-<body>
+        #input-container {
+            display: flex;
+            gap: 10px;
+            border-top: 1px solid #eee;
+            padding-top: 1rem;
+        }
 
-<h2>Groq Powered C++ Tutor</h2>
+        #user-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
 
-<div id="chat-container">
-  <div id="chat-box">
-    {% for chat in messages %}
-      <div class="message user">
-        <b>You:</b> {{ chat.user_message }}
-      </div>
-      <div class="message bot">
-        <b>Bot:</b>
-        <span class="short-text">
-          {{ chat.bot_response|truncatechars:100 }}
-          {% if chat.bot_response|length > 100 %}... <a class="read-more">Read more</a>{% endif %}
-        </span>
-        <span class="full-text" style="display:none;">
-          {{ chat.bot_response }} <a class="read-less">Show less</a>
-        </span>
-      </div>
-    {% endfor %}
-  </div>
+        #user-input:focus {
+            outline: none;
+            border-color: #0056D2;
+            box-shadow: 0 0 0 3px rgba(0, 86, 210, 0.1);
+        }
 
-  <div id="input-container">
-    <input type="text" id="user-input" placeholder="Ask your C++ doubts...">
-    <button id="send-btn" onclick="sendMessage()">&#9658;</button>
-  </div>
-</div>
+        #send-btn {
+            background: #0056D2;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-<script>
-  // Toggle Read More / Show Less
-  document.addEventListener('click', function(e){
-      if(e.target.classList.contains('read-more')){
-          const parent = e.target.closest('.message');
-          parent.querySelector('.short-text').style.display = 'none';
-          parent.querySelector('.full-text').style.display = 'inline';
-      }
-      if(e.target.classList.contains('read-less')){
-          const parent = e.target.closest('.message');
-          parent.querySelector('.short-text').style.display = 'inline';
-          parent.querySelector('.full-text').style.display = 'none';
-      }
-  });
+        #send-btn:hover {
+            background: #003d99;
+            transform: scale(1.05);
+        }
 
-  // Send message to backend
-  function sendMessage() {
-      let msgInput = document.getElementById("user-input");
-      let msg = msgInput.value.trim();
-      if (!msg) return;
+        #send-btn:active {
+            transform: scale(0.95);
+        }
 
-      fetch("", {
-          method: "POST",
-          headers: {
-              "Content-Type": "application/json",
-              "X-CSRFToken": "{{ csrf_token }}"
-          },
-          body: JSON.stringify({ message: msg })
-      })
-      .then(res => res.json())
-      .then(data => {
-          const chatBox = document.getElementById("chat-box");
+        #chat-box::-webkit-scrollbar {
+            width: 8px;
+        }
 
-          // Append user message
-          const userMsgDiv = document.createElement("div");
-          userMsgDiv.classList.add("message", "user");
-          userMsgDiv.innerHTML = `<b>You:</b> ${msg}`;
-          chatBox.appendChild(userMsgDiv);
+        #chat-box::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
 
-          // Append bot response
-          const botMsgDiv = document.createElement("div");
-          botMsgDiv.classList.add("message", "bot");
-          const botContent = data.response.length > 100
-              ? `<span class="short-text">${data.response.slice(0,100)}... <a class="read-more">Read more</a></span>
-                 <span class="full-text" style="display:none;">${data.response} <a class="read-less">Show less</a></span>`
-              : `<span>${data.response}</span>`;
-          botMsgDiv.innerHTML = `<b>Bot:</b> ${botContent}`;
-          chatBox.appendChild(botMsgDiv);
+        #chat-box::-webkit-scrollbar-thumb {
+            background: #0056D2;
+            border-radius: 4px;
+        }
 
-          // Scroll to bottom
-          chatBox.scrollTop = chatBox.scrollHeight;
+        #chat-box::-webkit-scrollbar-thumb:hover {
+            background: #003d99;
+        }
 
-          // Clear input
-          msgInput.value = "";
-      });
-  }
-</script>
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 2rem;
+        }
 
-</body>
-</html>
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            #chat-container {
+                height: 60vh;
+            }
+            .message {
+                max-width: 95%;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="chat-page">
+        <div class="chat-header">
+            <h1><i class="fas fa-robot"></i> AI C++ Tutor</h1>
+            <p>Get instant help with your C++ programming questions and learn faster with our AI assistant</p>
+        </div>
+
+        <div id="chat-container">
+            <div id="chat-box">
+                {% if messages %}
+                    {% for chat in messages %}
+                        <div class="message user">
+                            <b><i class="fas fa-user"></i> You</b>
+                            {{ chat.user_message }}
+                        </div>
+                        <div class="message bot">
+                            <b><i class="fas fa-robot"></i> AI Tutor</b>
+                            <span class="short-text">
+                                {{ chat.bot_response|truncatechars:100 }}
+                                {% if chat.bot_response|length > 100 %}
+                                    ... <a class="read-more">Read more</a>
+                                {% endif %}
+                            </span>
+                            <span class="full-text" style="display:none;">
+                                {{ chat.bot_response }}
+                                <a class="read-less">Show less</a>
+                            </span>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="empty-state">
+                        <i class="fas fa-comments"></i>
+                        <h3>Welcome to AI Tutor!</h3>
+                        <p>Ask me anything about C++ programming and I'll help you learn</p>
+                        <p><small>Try: "How do loops work?" or "Explain pointers in C++"</small></p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <div id="input-container">
+                <input type="text" id="user-input" placeholder="Ask your C++ question here..." autofocus>
+                <button id="send-btn" onclick="sendMessage()" title="Send message">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block extra_js %}
+    <script>
+        // Allow Enter key to send message
+        document.getElementById("user-input").addEventListener("keypress", function(e) {
+            if (e.key === "Enter") {
+                sendMessage();
+            }
+        });
+
+        // Toggle Read More / Show Less
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('read-more')) {
+                const parent = e.target.closest('.message');
+                parent.querySelector('.short-text').style.display = 'none';
+                parent.querySelector('.full-text').style.display = 'inline';
+            }
+            if (e.target.classList.contains('read-less')) {
+                const parent = e.target.closest('.message');
+                parent.querySelector('.short-text').style.display = 'inline';
+                parent.querySelector('.full-text').style.display = 'none';
+            }
+        });
+
+        // Send message to backend
+        function sendMessage() {
+            let msgInput = document.getElementById("user-input");
+            let msg = msgInput.value.trim();
+            if (!msg) return;
+
+            const chatBox = document.getElementById("chat-box");
+
+            // Remove empty state if exists
+            const emptyState = chatBox.querySelector('.empty-state');
+            if (emptyState) {
+                emptyState.remove();
+            }
+
+            // Append user message
+            const userMsgDiv = document.createElement("div");
+            userMsgDiv.classList.add("message", "user");
+            userMsgDiv.innerHTML = `<b><i class="fas fa-user"></i> You</b> ${escapeHtml(msg)}`;
+            chatBox.appendChild(userMsgDiv);
+
+            // Show loading indicator
+            const loadingDiv = document.createElement("div");
+            loadingDiv.classList.add("message", "bot");
+            loadingDiv.innerHTML = `<b><i class="fas fa-robot"></i> AI Tutor</b> <i class="fas fa-spinner fa-spin"></i> Thinking...`;
+            chatBox.appendChild(loadingDiv);
+
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            // Send to backend
+            fetch("{% url 'chat:chat' %}", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: "message=" + encodeURIComponent(msg)
+            })
+            .then(res => res.json())
+            .then(data => {
+                loadingDiv.remove();
+
+                // Append bot response
+                const botMsgDiv = document.createElement("div");
+                botMsgDiv.classList.add("message", "bot");
+                const response = data.response || "Sorry, I couldn't process that. Please try again.";
+                const botContent = response.length > 100
+                    ? `<span class="short-text">${escapeHtml(response.slice(0, 100))}... <a class="read-more">Read more</a></span>
+                       <span class="full-text" style="display:none;">${escapeHtml(response)} <a class="read-less">Show less</a></span>`
+                    : `<span>${escapeHtml(response)}</span>`;
+                botMsgDiv.innerHTML = `<b><i class="fas fa-robot"></i> AI Tutor</b> ${botContent}`;
+                chatBox.appendChild(botMsgDiv);
+
+                chatBox.scrollTop = chatBox.scrollHeight;
+            })
+            .catch(err => {
+                loadingDiv.remove();
+                const errorDiv = document.createElement("div");
+                errorDiv.classList.add("message", "bot");
+                errorDiv.innerHTML = `<b><i class="fas fa-robot"></i> AI Tutor</b> <span style="color: red;">Error connecting to AI. Please try again.</span>`;
+                chatBox.appendChild(errorDiv);
+            });
+
+            msgInput.value = "";
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+{% endblock %}
+

@@ -1,0 +1,216 @@
+{% extends "base.html" %}
+
+{% block title %}Result - C++ StoryLearn{% endblock %}
+
+{% block extra_css %}
+    <style>
+        .result-container {
+            max-width: 700px;
+            margin: 2rem auto;
+        }
+
+        .result-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .result-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .correct .result-icon {
+            color: #28a745;
+        }
+
+        .incorrect .result-icon {
+            color: #dc3545;
+        }
+
+        .result-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .correct .result-title {
+            color: #28a745;
+        }
+
+        .incorrect .result-title {
+            color: #dc3545;
+        }
+
+        .result-message {
+            font-size: 1.1rem;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .reward-section {
+            background: #f9faff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            border-left: 4px solid #FFC107;
+        }
+
+        .reward-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin: 0.5rem 0;
+        }
+
+        .reward-item i {
+            font-size: 1.5rem;
+            color: #FFC107;
+        }
+
+        .hint-section {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            color: #856404;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            text-align: left;
+            border-left: 4px solid #FFC107;
+        }
+
+        .hint-section h4 {
+            margin-top: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .answer-info {
+            background: #e7f3ff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            text-align: left;
+            border-left: 4px solid #0056D2;
+        }
+
+        .answer-info p {
+            margin: 0.5rem 0;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .button-group a {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        @media (max-width: 768px) {
+            .result-container {
+                margin: 1rem;
+            }
+            .result-card {
+                padding: 1.5rem;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="result-container">
+        {% if is_correct %}
+            <div class="result-card correct">
+                <div class="result-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="result-title">Excellent! 🎉</div>
+                <p class="result-message">Your answer is correct!</p>
+
+                <div class="reward-section">
+                    <div class="reward-item">
+                        <i class="fas fa-star"></i>
+                        <strong>+100 XP earned</strong>
+                    </div>
+                    <div class="reward-item">
+                        <i class="fas fa-trophy"></i>
+                        <strong>+10 Points</strong>
+                    </div>
+                    <div class="reward-item">
+                        <i class="fas fa-gem"></i>
+                        <strong>+1 Achievement</strong>
+                    </div>
+                </div>
+
+                <div class="answer-info">
+                    <p><strong>Your Answer:</strong> {{ selected_option.text }}</p>
+                    <p><strong>Status:</strong> <span style="color: #28a745; font-weight: bold;">✓ Correct</span></p>
+                </div>
+            </div>
+        {% else %}
+            <div class="result-card incorrect">
+                <div class="result-icon">
+                    <i class="fas fa-times-circle"></i>
+                </div>
+                <div class="result-title">Not Quite Right!</div>
+                <p class="result-message">Don't worry, learning is a journey. Try again!</p>
+
+                <div class="answer-info">
+                    <p><strong>Your Answer:</strong> {{ selected_option.text }}</p>
+                    <p><strong>Status:</strong> <span style="color: #dc3545; font-weight: bold;">✗ Incorrect</span></p>
+                </div>
+
+                {% if hint %}
+                    <div class="hint-section">
+                        <h4><i class="fas fa-lightbulb"></i> Hint</h4>
+                        <p>{{ hint }}</p>
+                    </div>
+                {% endif %}
+
+                <div style="background: #e7f3ff; padding: 1rem; border-radius: 8px; margin: 1.5rem 0; text-align: left; border-left: 4px solid #0056D2;">
+                    <p><strong>💡 Tip:</strong> Try asking the AI Tutor for help! It can explain concepts and guide you to the correct answer.</p>
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Navigation Buttons -->
+        <div class="button-group">
+            <a href="{% url 'game:home' %}" class="btn btn-secondary">
+                <i class="fas fa-home"></i> Back to Missions
+            </a>
+            {% if is_correct %}
+                <a href="{% url 'game:home' %}" class="btn btn-primary">
+                    <i class="fas fa-play"></i> Next Mission
+                </a>
+            {% else %}
+                <a href="{% url 'game:quiz' question.id %}" class="btn btn-primary">
+                    <i class="fas fa-redo"></i> Try Again
+                </a>
+                <a href="{% url 'chat:chat' %}" class="btn btn-secondary">
+                    <i class="fas fa-robot"></i> Ask AI Tutor
+                </a>
+            {% endif %}
+        </div>
+
+        <!-- Quick Links -->
+        <div class="card" style="margin-top: 2rem;">
+            <h3>Need Help?</h3>
+            <p>Our AI tutor is available 24/7 to help you understand C++ concepts and solve coding challenges.</p>
+            <a href="{% url 'chat:chat' %}" class="btn btn-primary">
+                <i class="fas fa-robot"></i> Chat with AI Tutor
+            </a>
+        </div>
+    </div>
+{% endblock %}

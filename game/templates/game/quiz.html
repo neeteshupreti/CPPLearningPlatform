@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}Quiz - C++ StoryLearn{% endblock %}
+
+{% block extra_css %}
+    <style>
+        .quiz-container {
+            max-width: 800px;
+            margin: 2rem auto;
+        }
+
+        .quiz-header {
+            background: linear-gradient(135deg, #0056D2 0%, #003d99 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .quiz-header h1 {
+            margin: 0 0 1rem 0;
+        }
+
+        .progress-container {
+            background: rgba(255,255,255,0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .progress-bar {
+            background: rgba(255,255,255,0.3);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+
+        .progress-fill {
+            background: #FFC107;
+            height: 100%;
+            width: 50%;
+            border-radius: 4px;
+        }
+
+        .question-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.05);
+            margin-bottom: 2rem;
+        }
+
+        .story-section {
+            background: #f9faff;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            border-left: 4px solid #0056D2;
+        }
+
+        .story-section h3 {
+            color: #0056D2;
+            margin-top: 0;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+            color: #333;
+            margin: 1.5rem 0;
+            font-weight: 600;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+
+        .option-label {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .option-label:hover {
+            border-color: #0056D2;
+            background: #f9faff;
+        }
+
+        .option-label input[type="radio"] {
+            margin-right: 1rem;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .option-label input[type="radio"]:checked + .option-text {
+            color: #0056D2;
+            font-weight: 600;
+        }
+
+        .option-text {
+            flex: 1;
+            color: #333;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .button-group button {
+            flex: 1;
+            min-width: 150px;
+        }
+
+        @media (max-width: 768px) {
+            .quiz-container {
+                margin: 1rem;
+            }
+            .question-card {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="quiz-container">
+        <div class="quiz-header">
+            <h1><i class="fas fa-code"></i> Mission Quiz</h1>
+            <div class="progress-container">
+                <small>Mission 1 of {{ total_questions }}</small>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+            </div>
+        </div>
+
+        {% if error %}
+            <div class="error-message">
+                <i class="fas fa-exclamation-circle"></i> {{ error }}
+            </div>
+        {% endif %}
+
+        <div class="question-card">
+            <!-- Story Section -->
+            <div class="story-section">
+                <h3><i class="fas fa-book-open"></i> Story: Robo-X's Mission</h3>
+                <p>{{ question.story }}</p>
+            </div>
+
+            <!-- Code Section (if any) -->
+            {% if question.code %}
+                <div class="story-section" style="border-left-color: #28a745;">
+                    <h3><i class="fas fa-code"></i> Code Snippet</h3>
+                    <pre style="background: white; padding: 1rem; border-radius: 6px; overflow-x: auto;"><code>{{ question.code }}</code></pre>
+                </div>
+            {% endif %}
+
+            <!-- Question -->
+            <div class="question-text">
+                What is the correct answer to this challenge?
+            </div>
+
+            <!-- Options -->
+            <form method="POST" action="{% url 'game:check' question.id %}">
+                {% csrf_token %}
+
+                <div class="options-container">
+                    {% for option in options %}
+                        <label class="option-label">
+                            <input type="radio" name="option" value="{{ option.id }}" required>
+                            <span class="option-text">{{ option.text }}</span>
+                        </label>
+                    {% endfor %}
+                </div>
+
+                <!-- Buttons -->
+                <div class="button-group">
+                    <a href="{% url 'game:home' %}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i> Back
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i> Submit Answer
+                    </button>
+                    <a href="{% url 'chat:chat' %}" class="btn btn-secondary">
+                        <i class="fas fa-robot"></i> Ask AI Tutor
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
