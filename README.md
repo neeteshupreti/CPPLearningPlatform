@@ -33,5 +33,11 @@ Follow these steps to get the project running locally:
 
 ### 1. Clone the repository
 ```bash
-git clone [https://github.com/your-username/RoboQuiz_py.git](https://github.com/your-username/RoboQuiz_py.git)
+git clone https://github.com/neeteshupreti/RoboQuiz_py.git
 cd RoboQuiz_py
+```
+
+### 2. Important Commands
+__python manage.py runserver__: Helps run the project as website in desired browser with localhost <br>
+__python manage.py makemigrations__: Generates migration files based on the changes made to models in models.py <br>
+__python manage.py migrate__: Applies the changes described in these migration files to the actual database <br>
