@@ -79,6 +79,10 @@ Thumbs.db
 *~
 .directory
 
+# Markdown files (except README.md)
+*.md
+!README.md
+
 # Project specific
 test_system.py
 show_status.py
