@@ -54,6 +54,20 @@
             margin-bottom: 0.5rem;
         }
 
+        .feature-card a {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 8px 16px;
+            background: #0056D2;
+            color: white;
+            border-radius: 6px;
+            transition: background 0.3s ease;
+        }
+
+        .feature-card a:hover {
+            background: #003d99;
+        }
+
         .cta-section {
             text-align: center;
             margin: 3rem 0;
@@ -61,6 +75,77 @@
 
         .cta-section .btn {
             margin: 0.5rem;
+        }
+
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .quick-link-btn {
+            padding: 1rem;
+            background: #f8f9fa;
+            border: 2px solid #0056D2;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: #0056D2;
+            font-weight: 600;
+        }
+
+        .quick-link-btn:hover {
+            background: #0056D2;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .quick-link-btn i {
+            display: block;
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .welcome-section {
+            background: #e3f2fd;
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 5px solid #0056D2;
+            margin: 2rem 0;
+        }
+
+        .welcome-section h2 {
+            color: #0056D2;
+            margin-bottom: 1rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-box {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #0056D2;
+        }
+
+        .stat-label {
+            color: #666;
+            margin-top: 0.5rem;
         }
     </style>
 {% endblock %}
@@ -70,11 +155,11 @@
         <h1>🚀 Welcome to C++ StoryLearn</h1>
         <p>Learn C++ Programming Through Interactive Storytelling, Missions & AI-Powered Guidance</p>
         {% if not user.is_authenticated %}
-            <a href="{% url 'accounts:signup' %}" class="btn btn-primary">Get Started</a>
+            <a href="{% url 'accounts:signup' %}" class="btn btn-primary">Get Started Now</a>
             <a href="{% url 'accounts:login' %}" class="btn btn-secondary">Already have an account? Login</a>
         {% else %}
-            <a href="{% url 'game:home' %}" class="btn btn-primary">Start Missions</a>
-            <a href="{% url 'chat:chat' %}" class="btn btn-secondary">Chat with AI Tutor</a>
+            <a href="{% url 'game:home' %}" class="btn btn-primary">⚡ Start Missions</a>
+            <a href="{% url 'chat:chat' %}" class="btn btn-secondary">💬 Chat with AI Tutor</a>
         {% endif %}
     </div>
 
@@ -83,33 +168,106 @@
             <i class="fas fa-book"></i>
             <h3>Story-Based Learning</h3>
             <p>Learn C++ through engaging interactive stories and real-world scenarios</p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'game:home' %}">Start Learning →</a>
+            {% endif %}
         </div>
         <div class="feature-card">
             <i class="fas fa-code"></i>
             <h3>Coding Challenges</h3>
             <p>Solve interactive coding challenges and practice C++ programming</p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'game:home' %}">View Challenges →</a>
+            {% endif %}
         </div>
         <div class="feature-card">
             <i class="fas fa-robot"></i>
             <h3>AI Tutor</h3>
             <p>Get instant help and hints from our powerful AI-powered chatbot</p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'chat:chat' %}">Chat Now →</a>
+            {% endif %}
         </div>
         <div class="feature-card">
             <i class="fas fa-trophy"></i>
-            <h3>Gamification</h3>
-            <p>Earn badges, compete with friends, and track your progress</p>
+            <h3>Progress Tracking</h3>
+            <p>Track your progress and see your improvement over time</p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'accounts:dashboard' %}">View Dashboard →</a>
+            {% endif %}
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-envelope"></i>
+            <h3>Get Support</h3>
+            <p>Contact us anytime with questions or feedback</p>
+            {% if user.is_authenticated %}
+                <a href="{% url 'accounts:contact' %}">Contact Us →</a>
+            {% endif %}
+        </div>
+        <div class="feature-card">
+            <i class="fas fa-star"></i>
+            <h3>Achievements</h3>
+            <p>Earn badges and certificates as you complete challenges</p>
         </div>
     </div>
 
     {% if user.is_authenticated %}
-    <div class="card">
-        <h2>Welcome Back, {{ user.first_name|default:user.username }}! 👋</h2>
-        <p>Continue your learning journey by starting new missions or chatting with our AI tutor for guidance.</p>
-        <div class="cta-section">
-            <a href="{% url 'game:home' %}" class="btn btn-primary">View All Missions</a>
-            <a href="{% url 'accounts:dashboard' %}" class="btn btn-secondary">My Dashboard</a>
-            <a href="{% url 'chat:chat' %}" class="btn btn-primary">Ask AI Tutor</a>
+    <div class="welcome-section">
+        <h2>👋 Welcome Back, {{ user.first_name|default:user.username }}!</h2>
+        <p>Continue your C++ learning journey by exploring missions, asking our AI tutor questions, or tracking your progress on the dashboard.</p>
+        
+        <div class="quick-links">
+            <a href="{% url 'game:home' %}" class="quick-link-btn">
+                <i class="fas fa-graduation-cap"></i>
+                Start Mission
+            </a>
+            <a href="{% url 'chat:chat' %}" class="quick-link-btn">
+                <i class="fas fa-comments"></i>
+                AI Tutor
+            </a>
+            <a href="{% url 'accounts:dashboard' %}" class="quick-link-btn">
+                <i class="fas fa-chart-line"></i>
+                Dashboard
+            </a>
+            <a href="{% url 'accounts:contact' %}" class="quick-link-btn">
+                <i class="fas fa-envelope"></i>
+                Contact
+            </a>
         </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-box">
+            <div class="stat-number">📚</div>
+            <div class="stat-label">Missions Available</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">🤖</div>
+            <div class="stat-label">AI Tutor Ready</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">⚡</div>
+            <div class="stat-label">Start Learning</div>
+        </div>
+        <div class="stat-box">
+            <div class="stat-number">✨</div>
+            <div class="stat-label">Progress Tracking</div>
+        </div>
+    </div>
+
+    <div class="cta-section">
+        <h2>Ready to Level Up Your C++ Skills?</h2>
+        <p>Join thousands of developers learning C++ through interactive storytelling</p>
+        <a href="{% url 'game:home' %}" class="btn btn-primary">Explore All Missions</a>
+        <a href="{% url 'accounts:dashboard' %}" class="btn btn-secondary">View Your Progress</a>
+        <a href="{% url 'chat:chat' %}" class="btn btn-primary">Get AI Help</a>
+    </div>
+    {% else %}
+    <div class="cta-section">
+        <h2>Start Your C++ Learning Journey Today</h2>
+        <p>Create an account or log in to access all features and begin learning</p>
+        <a href="{% url 'accounts:signup' %}" class="btn btn-primary">Sign Up Free</a>
+        <a href="{% url 'accounts:login' %}" class="btn btn-secondary">Login to Your Account</a>
     </div>
     {% endif %}
 {% endblock %}
