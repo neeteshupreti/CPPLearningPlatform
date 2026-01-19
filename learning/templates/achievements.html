@@ -1,0 +1,12 @@
+<h2>🏅 My Achievements</h2>
+
+<ul>
+{% for item in achievements %}
+    <li>
+        <strong>{{ item.achievement.name }}</strong>  
+        - {{ item.achievement.description }}
+    </li>
+{% empty %}
+    <li>No achievements yet.</li>
+{% endfor %}
+</ul>

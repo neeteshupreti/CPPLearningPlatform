@@ -6,6 +6,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
 from .forms import ContactForm
 from django.contrib import messages
+from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from learning.models import Chapter, UserAchievement, Achievement, UserProfile  # Import from learning app
+from django.contrib.auth.models import User
+
 
 # Landing page (HOME)
 def landing_view(request):
@@ -20,6 +25,7 @@ def register_view(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
         confirm_password = request.POST.get("confirm_password")
+        profile_picture = request.FILES.get("profile_picture")  # new
 
         if password != confirm_password:
             messages.error(request, "Passwords do not match")
@@ -33,16 +39,20 @@ def register_view(request):
             username=email,
             first_name=first_name,
             last_name=last_name,
-            email=email,
+             email=email,
             password=password
         )
         user.save()
+
+        # Save profile picture
+        if profile_picture:
+            user.userprofile.profile_picture = profile_picture
+            user.userprofile.save()
+
         messages.success(request, "Account created successfully")
         return redirect('accounts:login')
 
     return render(request, "accounts/register.html")
-
-
 # Login
 def login_view(request):
     if request.method == "POST":
@@ -81,3 +91,27 @@ def contact_view(request):
     else:
         form = ContactForm()
     return render(request, "accounts/contact.html", {"form": form})
+# views.py
+def dashboard_view(request):
+    chapters = Chapter.objects.order_by('order')
+    top_learners = UserProfile.objects.order_by('-xp')[:5]
+    recent_badges = UserAchievement.objects.filter(user=request.user).order_by('-earned_at')[:5]
+
+    # For progress
+    xp = request.user.userprofile.xp if hasattr(request.user, 'userprofile') else 0
+    level = (xp // 100) + 1
+    xp_next = ((level) * 100)
+
+    progress_percent = min(100, int((xp % 100) / 100 * 100))
+
+    context = {
+        'user': request.user,
+        'chapters': chapters,
+        'top_learners': top_learners,
+        'recent_badges': recent_badges,
+        'xp': xp,
+        'level': level,
+        'xp_next': xp_next,
+        'progress_percent': progress_percent,
+    }
+    return render(request, 'accounts/dashboard.html', context)

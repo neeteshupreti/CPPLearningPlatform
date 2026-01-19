@@ -1,0 +1,188 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ chapter.title }} | StoryLearnC++</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ===== BODY ===== */
+body {
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(to right, #e0f2fe, #fef3c7);
+    margin: 0;
+    color: #1f2937;
+    line-height: 1.6;
+}
+
+/* ===== HEADER ===== */
+header {
+    background: #233b8f;
+    color: #fff;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+header h1 {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 22px;
+    margin: 0;
+}
+header a.btn {
+    background: #fbbf24;
+    color: #1f2937;
+    padding: 12px 22px;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 700;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+header a.btn:hover {
+    background: #ffd84d;
+    color: #000;
+}
+
+/* ===== CONTAINER ===== */
+.chapter-container {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+/* ===== STORY SECTIONS ===== */
+.chapter-content h1, .chapter-content h2, .chapter-content h3 {
+    font-family: 'Press Start 2P', cursive;
+    color: #233b8f;
+    margin-top: 30px;
+    margin-bottom: 12px;
+}
+
+/* Paragraph styling */
+.chapter-content p {
+    margin-bottom: 16px;
+    font-size: 16px;
+}
+
+/* ===== STORY BOX ===== */
+.story-box {
+    background: #fff;
+    border-left: 6px solid #233b8f;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.story-box:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+}
+
+/* ===== TIP BOX ===== */
+.tip-box {
+    background: #fff8e5;
+    border-left: 6px solid #fbbf24;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+    font-weight: 500;
+    animation: glow 2s infinite alternate;
+}
+@keyframes glow {
+    0% { box-shadow: 0 0 5px #fbbf24; }
+    100% { box-shadow: 0 0 15px #fbbf24; }
+}
+
+/* ===== CODE BLOCKS ===== */
+pre {
+    background: #1e293b;
+    color: #f8fafc;
+    padding: 16px;
+    border-radius: 10px;
+    overflow-x: auto;
+    font-family: 'Courier New', monospace;
+    margin-bottom: 20px;
+    border-left: 6px solid #14b8a6;
+}
+
+/* Inline code */
+code {
+    background: #f3f4f6;
+    color: #1f2937;
+    padding: 2px 5px;
+    border-radius: 4px;
+}
+
+/* ===== LIST STYLING ===== */
+ul {
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+ul li {
+    margin-bottom: 10px;
+    position: relative;
+}
+ul li::before {
+    content: "💎";
+    position: absolute;
+    left: -25px;
+}
+
+/* ===== BUTTON ===== */
+.btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background: #233b8f;
+    color: #fff;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 700;
+    margin-top: 20px;
+    transition: transform 0.2s ease, background 0.3s ease;
+}
+.btn:hover {
+    background: #1e2d7a;
+    transform: translateY(-3px);
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    pre {
+        font-size: 14px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🏰 {{ chapter.title }}</h1>
+    <a href="{% url 'learning:chapter' %}" class="btn">Back to Chapters</a>
+</header>
+
+<div class="chapter-container">
+    <!-- Chapter content from database -->
+    <div class="chapter-content">
+        {{ chapter.content|safe }}
+    </div>
+
+    <!-- Optional: Quiz Button -->
+    {% if not chapter.is_locked %}
+        <a href="{% url 'learning:chapter_quiz' chapter.id %}" class="btn">Take Chapter Quiz</a>
+    {% endif %}
+</div>
+
+</body>
+</html>

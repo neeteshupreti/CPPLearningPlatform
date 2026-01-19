@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import requests
 from django.shortcuts import render
 from django.http import JsonResponse
@@ -57,7 +57,7 @@ def chat_view(request):
     # GET request: display all chats
     chats = ChatMessage.objects.all().order_by("timestamp")
     return render(request, "chat/chat.html", {"messages": chats})
-=======
+
 import requests
 from django.shortcuts import render
 from django.http import JsonResponse
@@ -116,4 +116,4 @@ def chat_view(request):
     # GET request: display all chats
     chats = ChatMessage.objects.all().order_by("timestamp")
     return render(request, "chat/chat.html", {"messages": chats})
->>>>>>> 3d5c8dafa1c7522f9648891421193305a5191b1e
+

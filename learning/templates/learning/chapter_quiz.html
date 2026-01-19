@@ -1,0 +1,86 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{ quiz.title }} | StoryLearnC++</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body {
+    font-family: 'Roboto', sans-serif;
+    background: #f0f9ff;
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 800px;
+    margin: 40px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+h1 {
+    color: #1e40af;
+}
+.question {
+    margin-bottom: 25px;
+    padding: 15px;
+    background: #e0f2fe;
+    border-left: 5px solid #1e40af;
+    border-radius: 10px;
+}
+.question h3 {
+    margin-bottom: 12px;
+}
+.options label {
+    display: block;
+    margin-bottom: 8px;
+    cursor: pointer;
+    padding: 8px 12px;
+    background: #fff;
+    border-radius: 8px;
+    border: 1px solid #cbd5e1;
+    transition: background 0.2s, transform 0.2s;
+}
+.options label:hover {
+    background: #bfdbfe;
+    transform: translateX(3px);
+}
+button {
+    padding: 12px 22px;
+    background: #1e40af;
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.3s;
+}
+button:hover {
+    background: #1e3a8a;
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <h1>{{ quiz.title }}</h1>
+    <form method="post" action="{% url 'learning:submit_quiz' quiz.id %}">
+        {% csrf_token %}
+        {% for question in questions %}
+            <div class="question">
+                <h3>{{ forloop.counter }}. {{ question.question_text }}</h3>
+                <div class="options">
+                    <label><input type="radio" name="question_{{ question.id }}" value="1" required> {{ question.option1 }}</label>
+                    <label><input type="radio" name="question_{{ question.id }}" value="2"> {{ question.option2 }}</label>
+                    <label><input type="radio" name="question_{{ question.id }}" value="3"> {{ question.option3 }}</label>
+                    <label><input type="radio" name="question_{{ question.id }}" value="4"> {{ question.option4 }}</label>
+                </div>
+            </div>
+        {% endfor %}
+        <button type="submit">Submit Quiz</button>
+    </form>
+</div>
+</body>
+</html>

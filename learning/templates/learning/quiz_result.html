@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz Result</title>
+
+```
+<style>
+    body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: linear-gradient(135deg, #e0f2fe, #fef3c7);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 30px;
+    }
+
+    .card {
+        background: white;
+        max-width: 520px;
+        width: 100%;
+        padding: 35px;
+        border-radius: 18px;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+        text-align: center;
+        animation: pop 0.6s ease;
+    }
+
+    @keyframes pop {
+        from {
+            transform: scale(0.9);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
+    h1 {
+        color: #1e40af;
+        margin-bottom: 5px;
+    }
+
+    h2 {
+        color: #374151;
+        margin-top: 0;
+        font-weight: normal;
+    }
+
+    .score {
+        font-size: 48px;
+        font-weight: bold;
+        color: #16a34a;
+        margin: 20px 0;
+    }
+
+    .stats {
+        margin: 20px 0;
+        font-size: 16px;
+        color: #374151;
+    }
+
+    .xp-box {
+        background: #f0f9ff;
+        border-radius: 12px;
+        padding: 15px;
+        margin: 25px 0;
+        border: 2px dashed #38bdf8;
+    }
+
+    .xp-box h3 {
+        margin: 8px 0;
+        color: #0369a1;
+    }
+
+    .btn {
+        display: inline-block;
+        padding: 12px 26px;
+        background: #1e40af;
+        color: white;
+        text-decoration: none;
+        border-radius: 30px;
+        margin-top: 20px;
+        font-weight: bold;
+        transition: 0.3s ease;
+    }
+
+    .btn:hover {
+        background: #1e3a8a;
+        transform: translateY(-2px);
+    }
+
+    .secondary {
+        background: #64748b;
+        margin-left: 10px;
+    }
+
+    .secondary:hover {
+        background: #475569;
+    }
+
+    .emoji {
+        font-size: 28px;
+    }
+
+    @media (max-width: 500px) {
+        .card {
+            padding: 25px;
+        }
+        .score {
+            font-size: 38px;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+
+<div class="card">
+
+```
+<h1>🎉 Quiz Completed!</h1>
+<h2>{{ quiz.title }}</h2>
+
+<div class="score">
+    {{ score }}%
+</div>
+
+<div class="stats">
+    <p>You answered <strong>{{ correct }}</strong> out of <strong>{{ total }}</strong> questions correctly.</p>
+</div>
+
+<div class="xp-box">
+    <h3>🎯 XP Earned: +{{ xp }}</h3>
+    <h3>⭐ Current Level: {{ level }}</h3>
+</div>
+
+<a href="{% url 'learning:chapter_detail' quiz.chapter.id %}" class="btn">
+    📘 Back to Chapter
+</a>
+
+<a href="{% url 'learning:chapter_list' %}" class="btn secondary">
+    🗺️ All Chapters
+</a>
+```
+
+</div>
+
+</body>
+</html>

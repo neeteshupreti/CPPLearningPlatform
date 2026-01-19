@@ -1,146 +1,150 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chapters | StoryLearnC++</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chapters | StoryLearnC++</title>
 
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Segoe UI", sans-serif;
-        }
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Segoe UI", sans-serif;
+    }
 
-        body {
-            background: #ffffff;
-            color: #1f2937;
-        }
+    body {
+        background: #ffffff;
+        color: #1f2937;
+    }
 
-        header {
-            background: #233b8f;
-        }
+    header {
+        background: #233b8f;
+    }
 
-        .navbar {
-            max-width: 1200px;
-            margin: auto;
-            padding: 14px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .navbar {
+        max-width: 1200px;
+        margin: auto;
+        padding: 14px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
 
-        .logo {
-            color: #fff;
-            font-size: 18px;
-            font-weight: 700;
-        }
+    .logo {
+        color: #fff;
+        font-size: 18px;
+        font-weight: 700;
+    }
 
-        .nav-links {
-            display: flex;
-            align-items: center;
-            gap: 28px;
-            color: #fff;
-            font-size: 15px;
-        }
+    .nav-links {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        color: #fff;
+        font-size: 15px;
+    }
 
-        .nav-links span {
-            cursor: pointer;
-        }
+    .nav-links span {
+        cursor: pointer;
+    }
 
-        .nav-links .active {
-            font-weight: 700;
-            text-decoration: underline;
-        }
+    .nav-links .active {
+        font-weight: 700;
+        text-decoration: underline;
+    }
 
-        .profile img {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            object-fit: cover;
-        }
+    .profile img {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
 
-        .page-title {
-            max-width: 1200px;
-            margin: 30px auto 20px;
-            padding: 0 40px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
+    .page-title {
+        max-width: 1200px;
+        margin: 30px auto 20px;
+        padding: 0 40px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+    }
 
-        .page-title::before,
-        .page-title::after {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: #9ca3af;
-        }
+    .page-title::before,
+    .page-title::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #9ca3af;
+    }
 
-        .page-title h2 {
-            font-size: 18px;
-            color: #233b8f;
-        }
+    .page-title h2 {
+        font-size: 18px;
+        color: #233b8f;
+    }
 
-        .chapters {
-            max-width: 1200px;
-            margin: auto;
-            padding: 20px 40px 60px;
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 30px;
-        }
+    .chapters {
+        max-width: 1200px;
+        margin: auto;
+        padding: 20px 40px 60px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 30px;
+    }
 
-        .chapter-card {
-            border: 1.5px solid #d1d5db;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #fff;
-            transition: transform 0.2s ease;
-            cursor: pointer;
-            position: relative;
-        }
+    .chapter-card {
+        border: 1.5px solid #d1d5db;
+        border-radius: 12px;
+        overflow: hidden;
+        background: #fff;
+        transition: transform 0.2s ease;
+        cursor: pointer;
+        position: relative;
+        text-decoration: none;
+        color: inherit;
+    }
 
-        .chapter-card:hover {
-            transform: translateY(-4px);
-        }
+    .chapter-card:hover {
+        transform: translateY(-4px);
+    }
 
-        .chapter-image {
-            height: 140px;
-            background: #e5e7eb;
-        }
+    .chapter-image {
+        height: 140px;
+        background: #e5e7eb;
+    }
 
-        .chapter-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    .chapter-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
 
-        .chapter-title {
-            padding: 12px;
-            font-size: 14px;
-            font-weight: 600;
-        }
+    .chapter-title {
+        padding: 12px;
+        font-size: 14px;
+        font-weight: 600;
+    }
 
-        .chapter-card.locked {
-            cursor: not-allowed;
-            filter: grayscale(100%);
-        }
+    .chapter-card.locked {
+        cursor: not-allowed;
+        filter: grayscale(100%);
+    }
 
-        .chapter-card.locked::after {
-            content: "🔒 Locked";
-            position: absolute;
-            inset: 0;
-            background: rgba(255,255,255,0.75);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            font-weight: 700;
-        }
-    </style>
+    .chapter-card.locked::after {
+        content: "🔒 Locked";
+        position: absolute;
+        inset: 0;
+        background: rgba(255,255,255,0.75);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: 700;
+    }
+</style>
+
 </head>
 <body>
 
@@ -164,47 +168,31 @@
 
 <section class="chapters">
 
-    <div class="chapter-card">
-        <div class="chapter-image">
-            <img src="{% static 'learning/images/variable.jpg' %}">
+{% for chapter in chapters %}
+    {% if not chapter.is_locked %}
+        <!-- Unlocked chapters clickable -->
+        <a href="{% url 'learning:chapter_detail' chapter.id %}" class="chapter-card">
+            <div class="chapter-image">
+                <img src="{{ chapter.image.url }}" alt="{{ chapter.title }}">
+            </div>
+            <div class="chapter-title">
+                {{ chapter.order }}. {{ chapter.title }}
+            </div>
+        </a>
+    {% else %}
+        <!-- Locked chapters greyed out -->
+        <div class="chapter-card locked">
+            <div class="chapter-image">
+                <img src="{{ chapter.image.url }}" alt="{{ chapter.title }}">
+            </div>
+            <div class="chapter-title">
+                {{ chapter.order }}. {{ chapter.title }}
+            </div>
         </div>
-        <div class="chapter-title">1. Kingdom of Variables</div>
-    </div>
-
-    <div class="chapter-card">
-        <div class="chapter-image">
-            <img src="{% static 'learning/images/chain-lakes-loop.jpg' %}">
-        </div>
-        <div class="chapter-title">2. Conditional Canyon</div>
-    </div>
-
-    <div class="chapter-card">
-        <div class="chapter-image">
-            <img src="{% static 'learning/images/chain-lakes-loop.jpg' %}">
-        </div>
-        <div class="chapter-title">3. Loop Lake</div>
-    </div>
-
-    <div class="chapter-card">
-        <div class="chapter-image">
-            <img src="{% static 'learning/images/download (5).jpg' %}">
-        </div>
-        <div class="chapter-title">4. Service House & Functions</div>
-    </div>
-
-    <div class="chapter-card">
-        <div class="chapter-image">
-            <img src="{% static 'learning/images/pointer.jpg' %}">
-        </div>
-        <div class="chapter-title">5. Pointer & Quest Class</div>
-    </div>
-
-    <div class="chapter-card locked">
-        <div class="chapter-image">
-            <img src="{% static 'learning/images/happy-royal-family.jpg' %}">
-        </div>
-        <div class="chapter-title">6. Inheritance Royal Family</div>
-    </div>
+    {% endif %}
+{% empty %}
+    <p>No chapters available.</p>
+{% endfor %}
 
 </section>
 

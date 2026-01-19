@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'accounts',
     'chat',
     'game',
+    'learning',
 ]
 
 

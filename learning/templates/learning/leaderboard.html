@@ -1,0 +1,19 @@
+<h2>🏆 Leaderboard</h2>
+
+<table border="1">
+    <tr>
+        <th>Rank</th>
+        <th>User</th>
+        <th>XP</th>
+        <th>Level</th>
+    </tr>
+
+    {% for profile in profiles %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{ profile.user.username }}</td>
+        <td>{{ profile.xp }}</td>
+        <td>{{ profile.level }}</td>
+    </tr>
+    {% endfor %}
+</table>
