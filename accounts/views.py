@@ -3,13 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
 from .forms import ContactForm
-from django.contrib import messages
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from learning.models import Chapter, UserAchievement, Achievement, UserProfile  # Import from learning app
-from django.contrib.auth.models import User
+from learning.models import Chapter, UserAchievement, Achievement, UserProfile
 
 
 # Landing page (HOME)
@@ -25,7 +20,7 @@ def register_view(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
         confirm_password = request.POST.get("confirm_password")
-        profile_picture = request.FILES.get("profile_picture")  # new
+        # profile_picture = request.FILES.get("profile_picture")  # new
 
         if password != confirm_password:
             messages.error(request, "Passwords do not match")
@@ -39,20 +34,23 @@ def register_view(request):
             username=email,
             first_name=first_name,
             last_name=last_name,
-             email=email,
+            email=email,
             password=password
         )
-        user.save()
 
-        # Save profile picture
-        if profile_picture:
-            user.userprofile.profile_picture = profile_picture
-            user.userprofile.save()
+        # Save profile picture if provided
+        # The UserProfile is auto-created by the signal when user is saved
+        # if profile_picture:
+        #     profile = user.learning_profile
+        #     profile.profile_picture = profile_picture
+        #     profile.save()
 
         messages.success(request, "Account created successfully")
         return redirect('accounts:login')
 
     return render(request, "accounts/register.html")
+
+
 # Login
 def login_view(request):
     if request.method == "POST":
@@ -70,17 +68,13 @@ def login_view(request):
     return render(request, "accounts/login.html")
 
 
-# Dashboard (requires login)
-@login_required(login_url='accounts:login')
-def dashboard_view(request):
-    return render(request, "accounts/dashboard.html")
-
-
 # Logout
 def logout_view(request):
     logout(request)
     return redirect('accounts:landing')
 
+
+# Contact Form
 def contact_view(request):
     if request.method == "POST":
         form = ContactForm(request.POST)
@@ -91,27 +85,53 @@ def contact_view(request):
     else:
         form = ContactForm()
     return render(request, "accounts/contact.html", {"form": form})
-# views.py
+
+
+# Dashboard (with profile info)
+@login_required(login_url='accounts:login')
 def dashboard_view(request):
-    chapters = Chapter.objects.order_by('order')
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+
+    # Calculate level and XP
+    level = (profile.xp // 100) + 1
+    xp = profile.xp
+    xp_next = level * 100  # XP required for next level
+
+    # Progress in percent for progress bar
+    progress_percent = int((xp / xp_next) * 100)
+
+    # Top learners
     top_learners = UserProfile.objects.order_by('-xp')[:5]
+
+    # Recent badges
     recent_badges = UserAchievement.objects.filter(user=request.user).order_by('-earned_at')[:5]
 
-    # For progress
-    xp = request.user.userprofile.xp if hasattr(request.user, 'userprofile') else 0
-    level = (xp // 100) + 1
-    xp_next = ((level) * 100)
-
-    progress_percent = min(100, int((xp % 100) / 100 * 100))
+    # Chapters with unlock status
+    from learning.models import UserChapterCompletion
+    chapters_list = Chapter.objects.order_by("order")
+    completed_chapters = UserChapterCompletion.objects.filter(user=request.user).values_list('chapter_id', flat=True)
+    
+    chapters = []
+    for chapter in chapters_list:
+        is_unlocked = chapter.order == 1 or (chapter.order - 1 <= max((c.order for c in chapters_list.filter(id__in=completed_chapters)), default=0))
+        chapters.append({
+            'id': chapter.id,
+            'title': chapter.title,
+            'image': chapter.image,
+            'is_locked': not is_unlocked,
+            'order': chapter.order
+        })
 
     context = {
-        'user': request.user,
-        'chapters': chapters,
-        'top_learners': top_learners,
-        'recent_badges': recent_badges,
-        'xp': xp,
+        'profile': profile,
         'level': level,
+        'xp': xp,
         'xp_next': xp_next,
         'progress_percent': progress_percent,
+        'top_learners': top_learners,
+        'recent_badges': recent_badges,
+        'chapters': chapters,
     }
+
     return render(request, 'accounts/dashboard.html', context)
+

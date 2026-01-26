@@ -7,32 +7,10 @@
 <title>StoryLearnC++ Dashboard</title>
 <style>
 * { box-sizing: border-box; font-family: "Segoe UI", sans-serif; margin: 0; padding: 0; }
-body { background: #f5f7fb; color: #1f2937; }
+body { background: #f5f7fb; color: #1f2937; min-height: 100vh; }
 
-/* LAYOUT */
-.layout { display: flex; min-height: 100vh; }
-
-/* SIDEBAR */
-.sidebar {
-    width: 240px;
-    background: #233b8f;
-    color: #fff;
-    padding: 24px 20px;
-    display: flex;
-    flex-direction: column;
-}
-.sidebar h2 { margin-bottom: 24px; font-size: 22px; }
-.profile { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
-.profile img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
-.menu { display: flex; flex-direction: column; gap: 12px; }
-.menu a { color: #fff; text-decoration: none; font-weight: 500; opacity: 0.9; transition: 0.3s; }
-.menu a:hover { opacity: 1; color: #fbbf24; }
-.logout { margin-top: auto; font-weight: 600; }
-.logout a { color: #fbbf24; text-decoration: none; }
-.logout a:hover { color: #fff; }
-
-/* MAIN */
-.main { flex: 1; padding: 32px; }
+/* MAIN CONTENT */
+.main { max-width: 1200px; margin: 0 auto; padding: 32px 20px; }
 
 /* TOPBAR */
 .topbar { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; margin-bottom: 32px; }
@@ -59,108 +37,81 @@ body { background: #f5f7fb; color: #1f2937; }
 
 /* RESPONSIVE */
 @media (max-width: 900px) {
-    .layout { flex-direction: column; }
-    .sidebar { width: 100%; flex-direction: row; justify-content: space-between; align-items: center; }
-    .menu { flex-direction: row; gap: 16px; }
-    .logout { margin-top: 0; }
+    .topbar { flex-direction: column; align-items: flex-start; }
+    .search input { width: 100%; }
     .cards, .chapters { grid-template-columns: 1fr; }
 }
 </style>
 </head>
 <body>
 
-<div class="layout">
+{% include 'header.html' %}
 
-    <!-- SIDEBAR -->
-    <aside class="sidebar">
-        <div>
-            <h2>StoryLearnC++</h2>
-        <div class="profile">
-    {% if user.userprofile.profile_picture %}
-        <img src="{{ user.userprofile.profile_picture.url }}" alt="{{ user.username }}">
-    {% else %}
-        <img src="{% static 'accounts/images/default-profile.jpg' %}" alt="user">
-    {% endif %}
-    <strong>{{ user.username }}</strong>
-</div>
+<main class="main">
 
+    <!-- TOPBAR -->
+    <div class="topbar">
+        <h2>Welcome back, {{ user.first_name }} 👋</h2>
+        <!-- <div class="search">
+            <input type="text" placeholder="Search chapter or mission">
+        </div> -->
+    </div>
 
-            <nav class="menu">
-                <a href="{% url 'learning:leaderboard' %}">Leaderboard</a>
-                <a href="{% url 'learning:achievements' %}">Achievements</a>
-                <a href="{% url 'learning:chapter' %}">Chapters</a>
-                <a href="{% url 'chat:chat' %}">Chatbot</a>
-            </nav>
-        </div>
-        <div class="logout">
-            <a href="{% url 'accounts:landing' %}">Logout</a>
-        </div>
-    </aside>
-
-    <!-- MAIN -->
-    <main class="main">
-
-        <!-- TOPBAR -->
-        <div class="topbar">
-            <h2>Welcome back, {{ user.first_name }} 👋</h2>
-            <div class="search">
-                <input type="text" placeholder="Search chapter or mission">
+    <!-- CARDS -->
+    <section class="cards">
+        <div class="card">
+            <h4>Your Progress</h4>
+            <p>Level {{ level }}</p>
+            <div class="progress-bar">
+                <div class="progress" style="width: {{ progress_percent }}%;"></div>
             </div>
+            <small>XP: {{ xp }} / {{ xp_next }}</small>
         </div>
 
-        <!-- CARDS -->
-        <section class="cards">
-            <div class="card">
-                <h4>Your Progress</h4>
-                <p>Level {{ level }}</p>
-                <div class="progress-bar">
-                    <div class="progress"></div>
-                </div>
-                <small>XP: {{ xp }} / {{ xp_next }}</small>
-            </div>
+        <div class="card">
+            <h4>Top Learners</h4>
+            {% for learner in top_learners %}
+                <p>{{ forloop.counter }}. {{ learner.user.username }} - {{ learner.xp }} XP</p>
+            {% empty %}
+                <p>No learners yet.</p>
+            {% endfor %}
+        </div>
 
-            <div class="card">
-                <h4>Top Learners</h4>
-                {% for learner in top_learners %}
-                    <p>{{ forloop.counter }}. {{ learner.user.username }} - {{ learner.xp }} XP</p>
-                {% empty %}
-                    <p>No learners yet.</p>
-                {% endfor %}
-            </div>
+        <div class="card">
+            <h4>Recent Badges</h4>
+            {% for badge in recent_badges %}
+                <p>🏆 {{ badge.achievement.name }}</p>
+            {% empty %}
+                <p>No badges earned yet.</p>
+            {% endfor %}
+        </div>
+    </section>
 
-            <div class="card">
-                <h4>Recent Badges</h4>
-                {% for badge in recent_badges %}
-                    <p>🏆 {{ badge.achievement.name }}</p>
-                {% empty %}
-                    <p>No badges earned yet.</p>
-                {% endfor %}
+    <!-- CHAPTERS JOURNEY -->
+    <section class="journey">
+        <h3>Continue Your Journey</h3>
+        <div class="chapters">
+            {% for chapter in chapters %}
+            <div class="chapter">
+                {% if chapter.image %}
+                    <img src="{{ chapter.image.url }}" alt="{{ chapter.title }}">
+                {% else %}
+                    <img src="{% static 'accounts/images/default-chapter.jpg' %}" alt="{{ chapter.title }}">
+                {% endif %}
+                <h4>{{ chapter.order }}. {{ chapter.title }}</h4>
+                {% if chapter.is_locked %}
+                    <a class="btn btn-secondary" href="#">🔒 Locked</a>
+                {% else %}
+                    <a class="btn" href="{% url 'learning:chapter_detail' chapter.id %}">Resume</a>
+                {% endif %}
             </div>
-        </section>
+            {% endfor %}
+        </div>
+    </section>
 
-        <!-- CHAPTERS JOURNEY -->
-        <section class="journey">
-            <h3>Continue Your Journey</h3>
-            <div class="chapters">
-                {% for chapter in chapters %}
-                <div class="chapter">
-                    {% if chapter.image %}
-                        <img src="{{ chapter.image.url }}" alt="{{ chapter.title }}">
-                    {% else %}
-                        <img src="{% static 'accounts/images/default-chapter.jpg' %}" alt="{{ chapter.title }}">
-                    {% endif %}
-                    <h4>{{ chapter.title }}</h4>
-                    {% if chapter.is_locked %}
-                        <a class="btn btn-secondary" href="#">Locked</a>
-                    {% else %}
-                        <a class="btn" href="{% url 'learning:chapter_detail' chapter.id %}">Resume</a>
-                    {% endif %}
-                </div>
-                {% endfor %}
-            </div>
-        </section>
+</main>
 
-    </main>
-</div>
+{% include 'footer.html' %}
+
 </body>
 </html>

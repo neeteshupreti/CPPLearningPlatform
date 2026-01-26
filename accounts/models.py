@@ -26,11 +26,13 @@ class ContactMessage(models.Model):
 # def save_user_profile(sender, instance, **kwargs):
 #     instance.userprofile.save()
 
+# class UserProfile(models.Model):
+#     # user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     # profile_picture = models.ImageField(
+#     #     upload_to='profile_pics/',
+#     #     blank=True,
+#     #     null=True
+#     # )
 
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="account_profile")
-    xp = models.IntegerField(default=0)
-    profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
-
-    def __str__(self):
-        return self.user.username
+#     # def __str__(self):
+#     #     return self.user.username

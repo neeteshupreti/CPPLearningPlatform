@@ -1,0 +1,170 @@
+{% load static %}
+<!-- HEADER NAVIGATION -->
+<header class="app-header">
+    <div class="navbar">
+        <a href="{% url 'accounts:landing' %}" class="logo">📘 StoryLearnC++</a>
+        <nav class="nav-links">
+            {% if user.is_authenticated %}
+                <a href="{% url 'accounts:dashboard' %}" class="nav-link">Dashboard</a>
+                <a href="{% url 'learning:chapter_list' %}" class="nav-link">Chapters</a>
+                <a href="{% url 'learning:leaderboard' %}" class="nav-link">Leaderboard</a>
+                <a href="{% url 'learning:achievements' %}" class="nav-link">Achievements</a>
+                <a href="{% url 'chat:chat' %}" class="nav-link">Chatbot</a>
+                <a href="{% url 'game:game' %}" class="nav-link">Game</a>
+                <div class="profile-section">
+                    {% if user.learning_profile.profile_picture %}
+                        <img src="{{ user.learning_profile.profile_picture.url }}" alt="{{ user.username }}" class="profile-pic">
+                    {% else %}
+                        <img src="{% static 'accounts/images/default-profile.jpg' %}" alt="user" class="profile-pic">
+                    {% endif %}
+                    <!-- <span class="username">{{ user.username }}</span> -->
+                    <form method="post" action="{% url 'accounts:logout' %}" style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+                </div>
+            {% else %}
+                <a href="{% url 'accounts:landing' %}" class="nav-link">Home</a>
+                <a href="{% url 'accounts:login' %}" class="nav-link">Login</a>
+                <a href="{% url 'accounts:signup' %}" class="nav-link">Signup</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+
+<style>
+/* HEADER STYLES */
+.app-header {
+    background: #233b8f;
+    border-bottom: 2px solid #1e3a8a;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 12px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+.logo {
+    color: #fff;
+    font-size: 20px;
+    font-weight: 700;
+    text-decoration: none;
+    flex-shrink: 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logo:hover {
+    opacity: 0.8;
+    color: #fbbf24;
+}
+
+.nav-links {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+}
+
+.nav-link {
+    color: #fff;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.nav-link:hover {
+    background: #fbbf24;
+    color: #1f2937;
+}
+
+.profile-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-left: 20px;
+    border-left: 1px solid rgba(255, 255, 255, 0.2);
+    margin-left: 10px;
+}
+
+.profile-pic {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+}
+
+.username {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.logout-btn {
+    color: #fbbf24;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.logout-btn:hover {
+    background: rgba(251, 191, 36, 0.2);
+    color: #fff;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .navbar {
+        flex-wrap: wrap;
+        padding: 12px 20px;
+        gap: 12px;
+        justify-content: center;
+    }
+
+    .logo {
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-links {
+        gap: 12px;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .profile-section {
+        width: 100%;
+        justify-content: center;
+        padding-left: 0;
+        border-left: none;
+        border-top: 1px solid rgba(255, 255, 255, 0.2);
+        padding-top: 12px;
+        margin-left: 0;
+    }
+
+    .nav-link {
+        font-size: 14px;
+        padding: 6px 10px;
+    }
+}
+</style>

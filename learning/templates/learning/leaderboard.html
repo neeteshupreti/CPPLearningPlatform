@@ -1,19 +1,469 @@
-<h2>🏆 Leaderboard</h2>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaderboard | StoryLearnC++</title>
 
-<table border="1">
-    <tr>
-        <th>Rank</th>
-        <th>User</th>
-        <th>XP</th>
-        <th>Level</th>
-    </tr>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
 
-    {% for profile in profiles %}
-    <tr>
-        <td>{{ forloop.counter }}</td>
-        <td>{{ profile.user.username }}</td>
-        <td>{{ profile.xp }}</td>
-        <td>{{ profile.level }}</td>
-    </tr>
-    {% endfor %}
-</table>
+body {
+    background: #f5f7fb;
+    color: #1f2937;
+}
+
+.leaderboard-header {
+    background: linear-gradient(135deg, #233b8f 0%, #1e2d7a 100%);
+    color: white;
+    padding: 2rem 40px;
+    text-align: center;
+}
+
+.leaderboard-header h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 28px;
+}
+
+.leaderboard-header p {
+    margin: 0;
+    opacity: 0.9;
+}
+
+.leaderboard-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 30px 20px;
+}
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    text-align: center;
+    border-top: 4px solid #233b8f;
+}
+
+.stat-icon {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.stat-number {
+    font-size: 24px;
+    font-weight: bold;
+    color: #233b8f;
+    margin: 10px 0;
+}
+
+.stat-label {
+    color: #666;
+    font-size: 13px;
+}
+
+/* Leaderboard Table */
+.leaderboard-table {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+thead {
+    background: #f9faff;
+    border-bottom: 2px solid #233b8f;
+}
+
+th {
+    padding: 1rem;
+    text-align: left;
+    font-weight: 600;
+    color: #233b8f;
+    font-size: 14px;
+}
+
+td {
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    word-break: break-word;
+}
+
+tbody tr {
+    transition: background 0.3s ease;
+}
+
+tbody tr:hover {
+    background: #f9faff;
+}
+
+.rank-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    font-weight: bold;
+    color: white;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+.rank-1 {
+    background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+}
+
+.rank-2 {
+    background: linear-gradient(135deg, #C0C0C0 0%, #808080 100%);
+}
+
+.rank-3 {
+    background: linear-gradient(135deg, #CD7F32 0%, #8B4513 100%);
+}
+
+.rank-default {
+    background: #233b8f;
+}
+
+.rank-cell {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.player-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+}
+
+.player-name span:first-child {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.score-cell {
+    font-weight: 600;
+    color: #233b8f;
+}
+
+.current-user {
+    background: #e7f3ff !important;
+}
+
+.current-user td {
+    font-weight: 600;
+    color: #233b8f;
+}
+
+.you-badge {
+    display: inline-block;
+    background: #233b8f;
+    color: white;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 600;
+    margin-left: 8px;
+}
+
+.medal {
+    font-size: 20px;
+    margin-right: 5px;
+}
+
+/* Achievement Info */
+.achievement-info {
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    margin-bottom: 30px;
+}
+
+.achievement-info h2 {
+    color: #233b8f;
+    margin-bottom: 10px;
+    font-size: 20px;
+}
+
+.achievement-info p {
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.achievement-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.achievement-item {
+    background: #f9faff;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    border-left: 3px solid #fbbf24;
+}
+
+.achievement-item strong {
+    display: block;
+    color: #233b8f;
+    margin-bottom: 5px;
+}
+
+.achievement-item p {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+/* Action Buttons */
+.action-buttons {
+    text-align: center;
+    margin-top: 30px;
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    background: #233b8f;
+    color: white;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #1e2d7a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(35, 59, 143, 0.3);
+}
+
+.btn-secondary {
+    background: #fbbf24;
+    color: #1f2937;
+}
+
+.btn-secondary:hover {
+    background: #f59e0b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .leaderboard-header {
+        padding: 1.5rem 20px;
+    }
+
+    .leaderboard-header h1 {
+        font-size: 22px;
+    }
+
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    th, td {
+        padding: 0.75rem;
+        font-size: 14px;
+    }
+
+    .rank-badge {
+        width: 35px;
+        height: 35px;
+        font-size: 12px;
+    }
+
+    .player-avatar {
+        width: 32px;
+        height: 32px;
+    }
+
+    .achievement-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+</style>
+
+</head>
+<body>
+
+{% include 'header.html' %}
+
+<!-- Header -->
+<div class="leaderboard-header">
+    <h1>🏆 Global Leaderboard</h1>
+    <p>Top performers in C++ StoryLearn challenges</p>
+</div>
+
+<div class="leaderboard-container">
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-number">{{ total_users }}</div>
+            <div class="stat-label">Active Learners</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">⭐</div>
+            <div class="stat-number">{{ total_xp }}</div>
+            <div class="stat-label">Total XP Earned</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-number">{{ total_completions }}</div>
+            <div class="stat-label">Chapters Completed</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon">📊</div>
+            <div class="stat-number">{{ avg_level }}</div>
+            <div class="stat-label">Avg Level</div>
+        </div>
+    </div>
+
+    <!-- Leaderboard Table -->
+    <div class="leaderboard-table">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 120px;">Rank</th>
+                    <th style="width: 40%; min-width: 200px;">Player Name</th>
+                    <th style="width: 12%;">Level</th>
+                    <th style="width: 15%;">XP Score</th>
+                    <th style="width: 23%;">Progress</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in leaderboard %}
+                <tr {% if item.is_current_user %}class="current-user"{% endif %}>
+                    <td>
+                        <div class="rank-cell">
+                            {% if item.rank == 1 %}
+                                <span class="medal">🥇</span>
+                                <span class="rank-badge rank-1">{{ item.rank }}</span>
+                            {% elif item.rank == 2 %}
+                                <span class="medal">🥈</span>
+                                <span class="rank-badge rank-2">{{ item.rank }}</span>
+                            {% elif item.rank == 3 %}
+                                <span class="medal">🥉</span>
+                                <span class="rank-badge rank-3">{{ item.rank }}</span>
+                            {% else %}
+                                <span class="rank-badge rank-default">#{{ item.rank }}</span>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="player-name">
+                            <span>{{ item.username }}</span>
+                            {% if item.is_current_user %}
+                                <span class="you-badge">YOU</span>
+                            {% endif %}
+                        </div>
+                    </td>
+                    <td>
+                        <strong>{{ item.level }}</strong>
+                    </td>
+                    <td>
+                        <span class="score-cell">{{ item.xp }} XP</span>
+                    </td>
+                    <td>
+                        <div style="font-size: 12px; color: #666;">{{ item.completed_chapters }}/6 chapters</div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" style="text-align: center; padding: 2rem;">
+                        <div style="font-size: 2rem; margin-bottom: 10px;">📭</div>
+                        <p style="color: #999;">No users on leaderboard yet. Complete chapters to appear here!</p>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Achievement Info -->
+    <div class="achievement-info">
+        <h2>⭐ Earn More Points</h2>
+        <p>Complete chapters and climb the leaderboard! Here's how to earn XP:</p>
+        <div class="achievement-grid">
+            <div class="achievement-item">
+                <strong>📖 Complete Chapter</strong>
+                <p>+100 XP for 100% quiz score</p>
+            </div>
+            <div class="achievement-item">
+                <strong>🔄 Correct Answers</strong>
+                <p>+10 XP per correct answer</p>
+            </div>
+            <div class="achievement-item">
+                <strong>🏆 Top 3</strong>
+                <p>Special recognition & prestige</p>
+            </div>
+            <div class="achievement-item">
+                <strong>📈 Progress</strong>
+                <p>Track your growth in real-time</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+        <a href="{% url 'learning:chapter_list' %}" class="btn">
+            📚 Continue Learning
+        </a>
+        <a href="{% url 'accounts:dashboard' %}" class="btn btn-secondary">
+            📊 My Dashboard
+        </a>
+    </div>
+</div>
+
+{% include 'footer.html' %}
+
+</body>
+</html>

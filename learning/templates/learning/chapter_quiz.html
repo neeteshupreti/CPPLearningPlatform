@@ -64,6 +64,9 @@ button:hover {
 </style>
 </head>
 <body>
+
+{% include 'header.html' %}
+
 <div class="container">
     <h1>{{ quiz.title }}</h1>
     <form method="post" action="{% url 'learning:submit_quiz' quiz.id %}">
@@ -82,5 +85,6 @@ button:hover {
         <button type="submit">Submit Quiz</button>
     </form>
 </div>
+{% include 'footer.html' %}
 </body>
 </html>

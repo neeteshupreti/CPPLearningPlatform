@@ -7,7 +7,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
 # Replace with your actual Groq API key
-GROQ_API_KEY = ""
+import os
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")  # Read from environment variable for security
 
 def ask_groq(prompt):
     """

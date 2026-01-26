@@ -20,49 +20,6 @@
         color: #1f2937;
     }
 
-    header {
-        background: #233b8f;
-    }
-
-    .navbar {
-        max-width: 1200px;
-        margin: auto;
-        padding: 14px 40px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .logo {
-        color: #fff;
-        font-size: 18px;
-        font-weight: 700;
-    }
-
-    .nav-links {
-        display: flex;
-        align-items: center;
-        gap: 28px;
-        color: #fff;
-        font-size: 15px;
-    }
-
-    .nav-links span {
-        cursor: pointer;
-    }
-
-    .nav-links .active {
-        font-weight: 700;
-        text-decoration: underline;
-    }
-
-    .profile img {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        object-fit: cover;
-    }
-
     .page-title {
         max-width: 1200px;
         margin: 30px auto 20px;
@@ -143,24 +100,22 @@
         font-size: 18px;
         font-weight: 700;
     }
+
+    @media (max-width: 900px) {
+        .chapters {
+            grid-template-columns: 1fr;
+            padding: 20px;
+        }
+        .page-title {
+            padding: 0 20px;
+        }
+    }
 </style>
 
 </head>
 <body>
 
-<header>
-    <div class="navbar">
-        <div class="logo">📘 StoryLearnC++</div>
-        <div class="nav-links">
-            <span>Home</span>
-            <span class="active">Chapters</span>
-            <span>Chatbot</span>
-            <div class="profile">
-                <img src="{% static 'images/pp2.avif' %}" alt="Profile">
-            </div>
-        </div>
-    </div>
-</header>
+{% include 'header.html' %}
 
 <div class="page-title">
     <h2>Choose your Chapters</h2>
@@ -168,25 +123,25 @@
 
 <section class="chapters">
 
-{% for chapter in chapters %}
-    {% if not chapter.is_locked %}
+{% for item in chapters %}
+    {% if item.is_unlocked %}
         <!-- Unlocked chapters clickable -->
-        <a href="{% url 'learning:chapter_detail' chapter.id %}" class="chapter-card">
+        <a href="{% url 'learning:chapter_detail' item.chapter.id %}" class="chapter-card">
             <div class="chapter-image">
-                <img src="{{ chapter.image.url }}" alt="{{ chapter.title }}">
+                <img src="{{ item.chapter.image.url }}" alt="{{ item.chapter.title }}">
             </div>
             <div class="chapter-title">
-                {{ chapter.order }}. {{ chapter.title }}
+                {{ item.chapter.order }}. {{ item.chapter.title }}
             </div>
         </a>
     {% else %}
         <!-- Locked chapters greyed out -->
         <div class="chapter-card locked">
             <div class="chapter-image">
-                <img src="{{ chapter.image.url }}" alt="{{ chapter.title }}">
+                <img src="{{ item.chapter.image.url }}" alt="{{ item.chapter.title }}">
             </div>
             <div class="chapter-title">
-                {{ chapter.order }}. {{ chapter.title }}
+                {{ item.chapter.order }}. {{ item.chapter.title }}
             </div>
         </div>
     {% endif %}
@@ -195,6 +150,8 @@
 {% endfor %}
 
 </section>
+
+{% include 'footer.html' %}
 
 </body>
 </html>

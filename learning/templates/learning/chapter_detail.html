@@ -20,8 +20,8 @@ body {
     line-height: 1.6;
 }
 
-/* ===== HEADER ===== */
-header {
+/* ===== PAGE HEADER ===== */
+.page-header {
     background: #233b8f;
     color: #fff;
     padding: 20px 40px;
@@ -29,13 +29,14 @@ header {
     justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
+    gap: 20px;
 }
-header h1 {
+.page-header h1 {
     font-family: 'Press Start 2P', cursive;
     font-size: 22px;
     margin: 0;
 }
-header a.btn {
+.page-header a.btn {
     background: #fbbf24;
     color: #1f2937;
     padding: 12px 22px;
@@ -44,7 +45,7 @@ header a.btn {
     font-weight: 700;
     transition: background 0.3s ease, color 0.3s ease;
 }
-header a.btn:hover {
+.page-header a.btn:hover {
     background: #ffd84d;
     color: #000;
 }
@@ -154,7 +155,7 @@ ul li::before {
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
-    header {
+    .page-header {
         flex-direction: column;
         gap: 15px;
     }
@@ -167,10 +168,13 @@ ul li::before {
 
 <body>
 
-<header>
+{% include 'header.html' %}
+
+<div class="page-header">
     <h1>🏰 {{ chapter.title }}</h1>
-    <a href="{% url 'learning:chapter' %}" class="btn">Back to Chapters</a>
-</header>
+    <!-- Back to chapter list -->
+    <a href="{% url 'learning:chapter_list' %}" class="btn">Back to Chapters</a>
+</div>
 
 <div class="chapter-container">
     <!-- Chapter content from database -->
@@ -178,11 +182,11 @@ ul li::before {
         {{ chapter.content|safe }}
     </div>
 
-    <!-- Optional: Quiz Button -->
-    {% if not chapter.is_locked %}
-        <a href="{% url 'learning:chapter_quiz' chapter.id %}" class="btn">Take Chapter Quiz</a>
-    {% endif %}
+    <!-- Quiz Button -->
+    <a href="{% url 'learning:chapter_quiz' chapter.id %}" class="btn">Take Chapter Quiz</a>
 </div>
+
+{% include 'footer.html' %}
 
 </body>
 </html>

@@ -1,20 +1,18 @@
+{% load static %}
 <!DOCTYPE html>
-
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Quiz Result</title>
-
-```
-<style>
+    <title>Quiz Result | StoryLearnC++</title>
+    <style>
     body {
         font-family: "Segoe UI", Arial, sans-serif;
         background: linear-gradient(135deg, #e0f2fe, #fef3c7);
         min-height: 100vh;
         display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 30px;
+        flex-direction: column;
+        padding: 0;
+        margin: 0;
     }
 
     .card {
@@ -26,6 +24,7 @@
         box-shadow: 0 15px 35px rgba(0,0,0,0.15);
         text-align: center;
         animation: pop 0.6s ease;
+        margin: 40px auto;
     }
 
     @keyframes pop {
@@ -114,41 +113,49 @@
             font-size: 38px;
         }
     }
-</style>
-```
-
+    </style>
 </head>
 <body>
 
+{% include 'header.html' %}
+
 <div class="card">
+    <h1>🎉 Quiz Completed!</h1>
+    <h2>{{ quiz.title }}</h2>
 
-```
-<h1>🎉 Quiz Completed!</h1>
-<h2>{{ quiz.title }}</h2>
+    <div class="score">
+        {{ score }}%
+    </div>
 
-<div class="score">
-    {{ score }}%
+    <div class="stats">
+        <p>You answered <strong>{{ correct }}</strong> out of <strong>{{ total }}</strong> questions correctly.</p>
+    </div>
+
+    <div class="xp-box">
+        <h3>🎯 XP Earned: +{{ xp }}</h3>
+        <h3>⭐ Current Level: {{ level }}</h3>
+    </div>
+
+    {% if score == 100 %}
+    <a href="{% url 'learning:chapter_detail' quiz.chapter.id %}" class="btn">
+        📘 Back to Chapter
+    </a>
+    {% else %}
+    <a href="{% url 'learning:chapter_quiz' quiz.chapter.id %}" class="btn">
+        🔄 Retry Quiz
+    </a>
+
+    <a href="{% url 'learning:chapter_detail' quiz.chapter.id %}" class="btn secondary">
+        📘 Back to Chapter
+    </a>
+    {% endif %}
+
+    <a href="{% url 'learning:chapter_list' %}" class="btn secondary">
+        🗺️ All Chapters
+    </a>
 </div>
 
-<div class="stats">
-    <p>You answered <strong>{{ correct }}</strong> out of <strong>{{ total }}</strong> questions correctly.</p>
-</div>
-
-<div class="xp-box">
-    <h3>🎯 XP Earned: +{{ xp }}</h3>
-    <h3>⭐ Current Level: {{ level }}</h3>
-</div>
-
-<a href="{% url 'learning:chapter_detail' quiz.chapter.id %}" class="btn">
-    📘 Back to Chapter
-</a>
-
-<a href="{% url 'learning:chapter_list' %}" class="btn secondary">
-    🗺️ All Chapters
-</a>
-```
-
-</div>
+{% include 'footer.html' %}
 
 </body>
 </html>

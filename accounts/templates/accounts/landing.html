@@ -10,17 +10,14 @@
 * { margin:0; padding:0; box-sizing:border-box; font-family: "Segoe UI", sans-serif; }
 body { background:#ffffff; color:#1f2937; }
 
-/* ================= HEADER ================= */
-header { background: #233b8f; padding:16px 40px; }
-.navbar { max-width:1200px; margin:auto; display:flex; align-items:center; justify-content:space-between; }
-.logo { color:#fff; font-size:20px; font-weight:700; }
-.nav-links a { color:#fff; text-decoration:none; margin-left:30px; font-size:15px; }
-.nav-links a:hover { color:#fbbf24; }
+
 
 /* ================= HERO ================= */
 .hero { max-width:1200px; margin:60px auto; padding:0 40px; display:flex; align-items:center; justify-content:space-between; gap:40px; }
 .hero-text { flex:1; }
 .hero-text h1 { font-size:32px; color:#233b8f; margin-bottom:16px; }
+.hero-text h1 a { color:#233b8f; text-decoration:none; cursor:pointer; transition:all 0.3s ease; }
+.hero-text h1 a:hover { color:#fbbf24; }
 .hero-text p { font-size:16px; margin-bottom:24px; }
 .hero-text a.btn-primary { background:#fbbf24; color:#1f2937; text-decoration:none; padding:12px 26px; border-radius:6px; font-weight:600; cursor:pointer; transition:0.3s; }
 .hero-text a.btn-primary:hover { background:#f59e0b; }
@@ -35,59 +32,24 @@ header { background: #233b8f; padding:16px 40px; }
 .feature-card h3 { color:#233b8f; margin-bottom:8px; font-size:16px; }
 .feature-card p { font-size:14px; }
 
-/* ================= FOOTER ================= */
-footer {
-    background: #1f2937;
-    color: #fff;
-    padding: 40px 20px 20px 20px;
-    margin-top:60px;
-}
-.footer-container {
-    max-width:1200px;
-    margin:auto;
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:space-between;
-    gap:20px;
-}
-.footer-col { flex:1 1 220px; }
-.footer-col h4 { font-size:18px; margin-bottom:20px; color:#fbbf24; }
-.footer-col ul { list-style:none; }
-.footer-col ul li { margin-bottom:12px; }
-.footer-col ul li a { color:#fff; text-decoration:none; font-size:14px; }
-.footer-col ul li a:hover { color:#fbbf24; }
-.footer-bottom { text-align:center; margin-top:30px; font-size:13px; color:#aaa; }
-
 /* ================= RESPONSIVE ================= */
 @media (max-width:900px) {
   .hero { flex-direction:column; text-align:center; }
   .features { grid-template-columns:1fr; }
-  .footer-container { flex-direction:column; text-align:center; }
 }
 </style>
 </head>
 <body>
 
 <!-- ================= HEADER ================= -->
-<header>
-    <div class="navbar">
-        <div class="logo">📘 StoryLearnC++</div>
-        <div class="nav-links">
-            <a href="{% url 'accounts:landing' %}">Home</a>
-            <a href="#">Chapters</a>
-            <a href="#">Chatbot</a>
-            <a href="{% url 'accounts:login' %}">Login</a>
-            <a href="{% url 'accounts:signup' %}">Signup</a>
-        </div>
-    </div>
-</header>
+{% include 'header.html' %}
 
 <!-- ================= HERO ================= -->
 <section class="hero">
     <div class="hero-text">
-        <h1>Learn C++ Through<br>Interactive Stories</h1>
+        <h1><a href="{% url 'accounts:landing' %}">Learn C++ Through<br>Interactive Stories</a></h1>
         <p>Master programming concepts through story, missions, coding tasks, and AI guidance.</p>
-        <a href="{% url 'accounts:signup' %}" class="btn-primary">Get Started</a>
+        <a href="{% if user.is_authenticated %}{% url 'accounts:dashboard' %}{% else %}{% url 'accounts:signup' %}{% endif %}" class="btn-primary">Get Started</a>
     </div>
     <div class="hero-image">
         <img src="{% static 'accounts/images/homee.png' %}" alt="Hero Image">
@@ -121,37 +83,7 @@ footer {
     </div>
 </section>
 
-<!-- ================= FOOTER ================= -->
-<footer>
-    <div class="footer-container">
-        <div class="footer-col">
-            <h4>StoryLearnC++</h4>
-            <p>Learn C++ programming with stories, challenges, and AI guidance. Join our community and start coding today!</p>
-        </div>
-        <div class="footer-col">
-            <h4>Quick Links</h4>
-            <ul>
-                <li><a href="{% url 'accounts:landing' %}">Home</a></li>
-                <li><a href="#">Chapters</a></li>
-                <li><a href="#">Chatbot</a></li>
-                <li><a href="{% url 'accounts:login' %}">Login</a></li>
-                <li><a href="{% url 'accounts:signup' %}">Signup</a></li>
-            </ul>
-        </div>
-        <div class="footer-col">
-            <h4>Contact Us</h4>
-            <ul>
-                <li>Email: support@storylearncpp.com</li>
-                <li>Phone: +977 9800000000</li>
-                <li><a href="{% url 'accounts:contact' %}">Contact Page</a></li>
-                <li>Follow us on <a href="#">Twitter</a> / <a href="#">Facebook</a></li>
-            </ul>
-        </div>
-    </div>
-    <div class="footer-bottom">
-        &copy; 2026 StoryLearnC++. All rights reserved.
-    </div>
-</footer>
+{% include 'footer.html' %}
 
 </body>
 </html>

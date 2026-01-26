@@ -1,0 +1,211 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Achievements | StoryLearnC++</title>
+    
+
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background: #f5f7fb;
+            margin: 0;
+            color: #1f2937;
+        }
+
+        /* ===== HEADER SECTION ===== */
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 30px;
+        }
+
+        /* ===== PROFILE CARD ===== */
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .profile-img {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid #fbbf24;
+            margin-bottom: 15px;
+        }
+        .xp-text {
+            color: #233b8f;
+            font-weight: 700;
+            font-size: 20px;
+        }
+        .progress-container {
+            background: #e5e7eb;
+            height: 12px;
+            border-radius: 6px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #233b8f;
+            width: {{ user_profile.xp_percent }}%; /* Dynamic */
+        }
+
+        /* ===== BADGE GRID ===== */
+        .badges-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+        .badge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .badge-card {
+            background: #f9faff;
+            border: 2px solid #eef2ff;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        .badge-card:hover:not(.locked) {
+            transform: translateY(-5px);
+            border-color: #fbbf24;
+        }
+
+        .badge-icon {
+            font-size: 50px;
+            margin-bottom: 15px;
+            display: block;
+        }
+
+        .badge-name {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 10px;
+            line-height: 1.4;
+            color: #233b8f;
+        }
+
+        /* ===== LOCKED STATE ===== */
+        .badge-card.locked {
+            opacity: 0.6;
+            filter: grayscale(1);
+            background: #f3f4f6;
+            cursor: not-allowed;
+        }
+        .lock-overlay {
+            font-size: 24px;
+            color: #9ca3af;
+            margin-top: 10px;
+        }
+
+        /* ===== TABS ===== */
+        .tabs {
+            display: flex;
+            gap: 20px;
+            border-bottom: 2px solid #f3f4f6;
+            margin-bottom: 25px;
+        }
+        .tab {
+            padding-bottom: 10px;
+            cursor: pointer;
+            font-weight: 700;
+            color: #6b7280;
+            border-bottom: 3px solid transparent;
+        }
+        .tab.active {
+            color: #233b8f;
+            border-bottom-color: #fbbf24;
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-grid { grid-template-columns: 1fr; }
+            .container { margin-top: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+{% include 'header.html' %}
+
+<div class="container">
+    <div class="dashboard-grid">
+        
+        <div class="left-col">
+            <div class="card">
+                <img src="{% static 'images/default_avatar.png' %}" class="profile-img" alt="Avatar">
+                <h3>{{ request.user.username }}</h3>
+                <p class="xp-text">{{ user_profile.xp }} XP</p>
+                
+                <div class="progress-container">
+                    <div class="progress-fill"></div>
+                </div>
+                <p style="font-size: 14px; color: #6b7280;">Level {{ user_profile.level }} Explorer</p>
+                
+                <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+                
+                <div style="display: flex; justify-content: space-around;">
+                    <div>
+                        <div style="font-weight: bold; color: #233b8f;">{{ unlocked_count }}</div>
+                        <div style="font-size: 12px;">Unlocked</div>
+                    </div>
+                    <div>
+                        <div style="font-weight: bold; color: #233b8f;">{{ total_badges }}</div>
+                        <div style="font-size: 12px;">Total</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="badges-section">
+            <div class="tabs">
+                <div class="tab active">Badges</div>
+            </div>
+
+            <div class="badge-grid">
+                {% for badge in badges %}
+                    <div class="badge-card {% if not badge.is_unlocked %}locked{% endif %}">
+                        <span class="badge-icon">
+                            {% if badge.is_unlocked %}{{ badge.icon_emoji }}{% else %}🔒{% endif %}
+                        </span>
+                        <div class="badge-name">{{ badge.name }}</div>
+                        {% if not badge.is_unlocked %}
+                            <div style="font-size: 11px; margin-top: 8px; color: #9ca3af;">
+                                Complete Chapter {{ badge.required_chapter }}
+                            </div>
+                        {% else %}
+                            <div style="font-size: 11px; margin-top: 8px; color: #059669;">
+                                Unlocked on {{ badge.date_earned|date:"M d" }}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <p>Start your first chapter to earn badges!</p>
+                {% endfor %}
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% include 'footer.html' %}
+
+</body>
+</html>

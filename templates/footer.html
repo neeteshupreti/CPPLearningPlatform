@@ -1,0 +1,114 @@
+<!-- FOOTER NAVIGATION -->
+<footer class="app-footer">
+    <div class="footer-container">
+        <div class="footer-col">
+            <h4>📘 StoryLearnC++</h4>
+            <p>Learn C++ programming with stories, challenges, and AI guidance. Join our community and start coding today!</p>
+        </div>
+        <div class="footer-col">
+            <h4>Quick Links</h4>
+            <ul>
+                <li><a href="{% url 'accounts:landing' %}">Home</a></li>
+                <li><a href="{% url 'learning:chapter_list' %}">Chapters</a></li>
+                <li><a href="{% url 'chat:chat' %}">Chatbot</a></li>
+                <li><a href="{% url 'accounts:login' %}">Login</a></li>
+                <li><a href="{% url 'accounts:signup' %}">Signup</a></li>
+            </ul>
+        </div>
+        <div class="footer-col">
+            <h4>Support</h4>
+            <ul>
+                <li>📧 support@storylearncpp.com</li>
+                <li>📱 +977 9800000000</li>
+                <li><a href="{% url 'accounts:contact' %}">Contact Us</a></li>
+                <li><a href="#">Twitter</a> / <a href="#">Facebook</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        &copy; 2026 StoryLearnC++. All rights reserved.
+    </div>
+</footer>
+
+<style>
+/* FOOTER STYLES */
+.app-footer {
+    background: #1f2937;
+    color: #fff;
+    padding: 40px 20px 20px 20px;
+    margin-top: 60px;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.footer-col {
+    flex: 1 1 220px;
+}
+
+.footer-col h4 {
+    font-size: 16px;
+    margin-bottom: 15px;
+    color: #fbbf24;
+    font-weight: 600;
+}
+
+.footer-col p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #d1d5db;
+}
+
+.footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-col ul li {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.footer-col ul li a {
+    color: #d1d5db;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.footer-col ul li a:hover {
+    color: #fbbf24;
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: -10px;
+    padding-top: 20px;
+    border-top: 1px solid #374151;
+    font-size: 13px;
+    color: #9ca3af;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+
+    .footer-col {
+        flex: 1;
+    }
+
+    .footer-col ul li {
+        margin-bottom: 8px;
+    }
+}
+</style>

@@ -18,16 +18,14 @@
         }
 
         body {
-            background-color: #233b8f;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background-color: #ffffff;
+            color: #1f2937;
         }
 
         .container {
-            padding: 100px;
-            align-items: center;
+            padding: 100px 20px;
+            display: flex;
+            justify-content: center;
         }
 
         .card {
@@ -36,6 +34,7 @@
             padding: 35px 30px;
             border-radius: 16px;
             text-align: center;
+            border: 2px solid #9ca3af;
         }
 
         h2 {
@@ -46,7 +45,7 @@
 
         .input-group {
             position: relative;
-            margin-bottom: 26px;
+            margin-bottom: 40px;
         }
 
         .input-group input {
@@ -57,6 +56,11 @@
             border: 1px solid #8f8f8f;
             font-size: 14px;
             outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .input-group input:focus {
+            border-color: #233b8f;
         }
 
         .input-group i {
@@ -114,6 +118,8 @@
 </head>
 <body>
 
+{% include 'header.html' %}
+
 <div class="container">
     <div class="card">
         <h2>Sign Up</h2>
@@ -147,13 +153,10 @@
             </div>
 
             <div class="input-group">
-                <input type="password" name="confirm_password" placeholder="Confirm Password">
+                <input type="password" id="confirmPassword" name="confirm_password" placeholder="Confirm Password">
                 <i class="fa fa-lock"></i>
                 <small></small>
             </div>
-             <div class="input-group">
-        <input type="file" name="profile_picture" accept="image/*">
-    </div>
 
             <button type="submit">Sign up</button>
         </form>
@@ -175,6 +178,7 @@
         valid &= validate("lastName", "Last name is required");
         valid &= validateEmail();
         valid &= validatePassword();
+        valid &= validateConfirmPassword();
 
         if (!valid) e.preventDefault();
     });
@@ -212,7 +216,21 @@
         error.textContent = "";
         return true;
     }
+
+    function validateConfirmPassword() {
+        const password = document.getElementById("password");
+        const confirmPassword = document.getElementById("confirmPassword");
+        const error = confirmPassword.nextElementSibling.nextElementSibling;
+        if (confirmPassword.value !== password.value) {
+            error.textContent = "Passwords do not match";
+            return false;
+        }
+        error.textContent = "";
+        return true;
+    }
 </script>
+
+{% include 'footer.html' %}
 
 </body>
 </html>

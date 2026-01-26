@@ -1,0 +1,261 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Firewall Guardian Game | StoryLearnC++</title>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+    <style>
+        body {
+            font-family: "Segoe UI", sans-serif;
+            background: #f5f7fb;
+            margin: 0;
+            color: #1f2937;
+        }
+
+        /* ===== HEADER SECTION ===== */
+
+
+        /* MISSION CONTROL - Keeping your preferred design */
+        .mission-control {
+            max-width: 900px;
+            margin: 20px auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .info-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            border-left: 5px solid #233b8f;
+        }
+
+        .info-card h3 {
+            margin-top: 0;
+            color: #233b8f;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+        }
+
+        /* GAME ARENA */
+        .game-wrapper {
+            background: #0f172a;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 900px;
+            margin: 20px auto;
+            position: relative;
+            border: 4px solid #1e293b;
+        }
+
+        #gameCanvas {
+            background: radial-gradient(circle, #1e1b4b 0%, #020617 100%);
+            border-radius: 8px;
+            cursor: crosshair;
+            width: 100%;
+            display: block;
+        }
+
+        #overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            border-radius: 16px;
+        }
+
+        .btn-start {
+            background: #fbbf24;
+            color: #1f2937;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            border: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-start:hover { background: #fff; transform: scale(1.05); }
+    </style>
+</head>
+<body>
+
+{% include 'header.html' %}
+
+<div class="container">
+    <div class="info-card">
+        <h3>🛡️ THE MISSION</h3>
+        <p>You are the <b>Firewall Guardian</b>. Corrupted code snippets are attempting to bypass security. Analyze the packets and secure the valid ones!</p>
+    </div>
+    <div class="info-card" style="border-left-color: #fbbf24;">
+        <h3>🎮 HOW TO PLAY</h3>
+        <ul style="font-size: 14px; padding-left: 20px;">
+            <li><b>Click</b> blocks with <b>Correct</b> C++ syntax (+10 XP).</li>
+            <li><b>Ignore</b> blocks with <b>Bugs</b>. Clicking them damages your shield!</li>
+            <li>Shield collapses if <b>Correct</b> code falls through.</li>
+        </ul>
+    </div>
+</div>
+
+<div class="game-wrapper">
+    <div style="display: flex; justify-content: space-between; margin-bottom: 15px; color: #fbbf24; font-family: 'Press Start 2P'; font-size: 12px;">
+        <span>XP: <span id="score">0000</span></span>
+        <span>SHIELD: <span id="health">100%</span></span>
+    </div>
+
+    <canvas id="gameCanvas" width="800" height="500"></canvas>
+
+    <div id="overlay">
+        <h1 style="color: white; font-family: 'Press Start 2P'; font-size: 20px; margin-bottom: 10px;">CORE SECURED</h1>
+        <p style="color: #94a3b8; margin-bottom: 20px;">Analyze the syntax carefully.</p>
+        <button class="btn-start" onclick="startGame()">START DEFENSE</button>
+    </div>
+</div>
+</div>
+{% include 'footer.html' %}
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+const overlay = document.getElementById('overlay');
+
+let score, health, gameActive, codes;
+
+const snippets = [
+    { text: "int n = 10;", valid: true },
+    { text: "std::cin >> x;", valid: true },
+    { text: "if(x == 5)", valid: true },
+    { text: "int n = 10", valid: false }, 
+    { text: "cin << x;", valid: false }, 
+    { text: "float 1x = 0.5;", valid: false },
+    { text: "char c = 'A';", valid: true },
+    { text: "string s = val;", valid: false },
+    { text: "while(true){}", valid: true },
+    { text: "return 0", valid: false }
+];
+
+function startGame() {
+    score = 0; health = 100; gameActive = true; codes = [];
+    overlay.style.display = 'none';
+    spawnCode();
+    requestAnimationFrame(gameLoop);
+}
+
+function spawnCode() {
+    if (!gameActive) return;
+    const s = snippets[Math.floor(Math.random() * snippets.length)];
+    codes.push({
+        text: s.text,
+        valid: s.valid,
+        x: Math.random() * (canvas.width - 220) + 20,
+        y: -50,
+        speed: 0.9 + (score / 800)
+    });
+    setTimeout(spawnCode, Math.max(1000, 2500 - (score * 5)));
+}
+
+function gameLoop() {
+    if (!gameActive) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    for (let i = codes.length - 1; i >= 0; i--) {
+        let c = codes[i];
+        c.y += c.speed;
+
+        // ENHANCED CODE BLOCK DESIGN
+        // 1. Shadow/Glow
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = "rgba(59, 130, 246, 0.5)";
+
+        // 2. Block Background (Glassy Dark Blue)
+        ctx.fillStyle = "rgba(30, 41, 59, 0.95)";
+        ctx.fillRect(c.x, c.y, 200, 45);
+
+        // 3. Glowing Border (Neutral Silver-Blue)
+        ctx.shadowBlur = 0;
+        ctx.strokeStyle = "#6366f1"; 
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // 4. Code Text
+        ctx.font = "bold 15px 'Courier New'";
+        ctx.fillStyle = "#60a5fa"; // Modern Code Blue
+        ctx.textAlign = "center";
+        ctx.fillText(c.text, c.x + 100, c.y + 28);
+
+        if (c.y > canvas.height) {
+            if (c.valid) updateHealth(-10);
+            codes.splice(i, 1);
+        }
+    }
+
+    if (health <= 0) endGame();
+    requestAnimationFrame(gameLoop);
+}
+
+canvas.addEventListener('mousedown', (e) => {
+    if (!gameActive) return;
+    const rect = canvas.getBoundingClientRect();
+    const mx = (e.clientX - rect.left) * (canvas.width / rect.width);
+    const my = (e.clientY - rect.top) * (canvas.height / rect.height);
+
+    for (let i = codes.length - 1; i >= 0; i--) {
+        let c = codes[i];
+        if (mx > c.x && mx < c.x + 200 && my > c.y && my < c.y + 45) {
+            if (c.valid) {
+                score += 10;
+                document.getElementById('score').innerText = score.toString().padStart(4, '0');
+            } else {
+                updateHealth(-20);
+            }
+            codes.splice(i, 1);
+            return;
+        }
+    }
+});
+
+function updateHealth(amt) {
+    health += amt;
+    document.getElementById('health').innerText = Math.max(0, health) + "%";
+    if (amt < 0) {
+        // Red Screen Flash
+        canvas.style.boxShadow = "inset 0 0 60px rgba(239, 68, 68, 0.8)";
+        setTimeout(() => canvas.style.boxShadow = "none", 150);
+    }
+}
+
+function endGame() {
+    gameActive = false;
+    overlay.style.display = 'flex';
+    document.querySelector('#overlay h1').innerText = "SYSTEM FAILURE";
+    document.querySelector('#overlay p').innerText = `Your defense score: ${score} XP`;
+
+    // Send score to server
+    fetch('/game/update_xp/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrf-token]').content
+        },
+        body: JSON.stringify({score: score})
+    }).then(response => response.json()).then(data => {
+        if (data.status === 'success') {
+            alert('XP updated successfully!');
+        }
+    });
+}
+</script>
+
+</body>
+</html>

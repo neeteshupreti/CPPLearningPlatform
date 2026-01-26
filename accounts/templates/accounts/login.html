@@ -20,34 +20,6 @@
     body {
         background: #ffffff;
         color: #1f2937;
-        min-height: 100vh;
-    }
-
-    /* ================= NAVBAR ================= */
-    header {
-        background: #233b8f;
-    }
-
-    .navbar {
-        max-width: 1200px;
-        margin: auto;
-        padding: 16px 40px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-
-    .logo {
-        color: #fff;
-        font-size: 18px;
-        font-weight: 700;
-    }
-
-    .nav-links a {
-        color: #fff;
-        text-decoration: none;
-        margin-left: 30px;
-        font-size: 15px;
     }
 
     /* ================= LOGIN CONTAINER ================= */
@@ -159,22 +131,20 @@
             max-width: 360px;
         }
     }
+
+    /* Sticky Footer */
+    .app-footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+    }
 </style>
 </head>
 <body>
 
-<!-- ================= NAVBAR ================= -->
-<header>
-    <div class="navbar">
-        <div class="logo">📘 StoryLearnC++</div>
-        <div class="nav-links">
-            <a href="#">Home</a>
-            <a href="#">Chapters</a>
-            <a href="#">Chatbot</a>
-            <a href="{% url 'accounts:login' %}">Login</a>
-        </div>
-    </div>
-</header>
+{% include 'header.html' %}
 
 <!-- ================= LOGIN FORM ================= -->
 <div class="login-wrapper">
@@ -255,6 +225,8 @@
         }
     });
 </script>
+
+{% include 'footer.html' %}
 
 </body>
 </html>
